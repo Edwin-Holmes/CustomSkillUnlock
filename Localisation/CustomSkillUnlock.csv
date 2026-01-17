@@ -1,0 +1,65 @@
+;meta[language=en]
+; id      |key(hex)|key(str)| text
+;
+; comment lines use ; as first character
+; all comment lines (except the two line header) will be ignored
+;
+2118765000|        ||This string is accessible only by its id 2118765000
+;
+; example: key strings, useable characters: a-z0-9_       id=8765
+;
+; Main Menu
+2118765001||panel_Mods|Mods
+; Group Header
+2118765002||panel_CSU|Custom Skill & Slot Unlocks
+;
+; SKill Unlock Cost SectionFFD700
+2118765003||panel_Skill_Unlock_Cost|<font color="#EFDAAB">Skill Unlocks</font>
+2118765004||preset_Mods_CSU_Skill_Unlock_Cost|<font color="#EFDAAB">Skill Unlock Requirements</font>
+2118765005||option_Confirm_Buy|Show Confirmation Popup When Buying Skills
+2118765006||option_Enable_Column_Unlocks|Skills Unlock By Column
+2118765007||option_Enable_Row_Unlocks|Skills Unlock By Row
+2118765008||option_Sword_Tier_1|Cost to Unlock <font color="#990000">Sword</font> Branch Tier 1
+2118765009||option_Sword_Tier_2|Cost to Unlock <font color="#990000">Sword</font> Branch Tier 2
+2118765010||option_Sword_Tier_3|Cost to Unlock <font color="#990000">Sword</font> Branch Tier 3
+2118765011||option_Magic_Tier_1|Cost to Unlock <font color="#5585DD">Signs</font> Branch Tier 1
+2118765012||option_Magic_Tier_2|Cost to Unlock <font color="#5585DD">Signs</font> Branch Tier 2
+2118765013||option_Magic_Tier_3|Cost to Unlock <font color="#5585DD">Signs</font> Branch Tier 3
+2118765014||option_Alchemy_Tier_1|Cost to Unlock <font color="#009900">Alchemy</font> Branch Tier 1
+2118765015||option_Alchemy_Tier_2|Cost to Unlock <font color="#009900">Alchemy</font> Branch Tier 2
+2118765016||option_Alchemy_Tier_3|Cost to Unlock <font color="#009900">Alchemy</font> Branch Tier 3
+;
+; Slot Unlock Cost Section
+2118765017||panel_Slot_Unlock|<font color="#CEB889">Slot Unlocks</font>
+2118765018||preset_Mods_CSU_Slot_Unlock|<font color="#CEB889">Slot Unlock Requirements</font>
+2118765019||option_Slot_1_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 1
+2118765020||option_Slot_2_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 2
+2118765021||option_Slot_3_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 3
+2118765022||option_Slot_4_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 4
+2118765023||option_Slot_5_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 5
+2118765024||option_Slot_6_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 6
+2118765025||option_Slot_7_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 7
+2118765026||option_Slot_8_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 8
+2118765027||option_Slot_9_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 9
+2118765028||option_Slot_10_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 10
+2118765029||option_Slot_11_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 11
+2118765030||option_Slot_12_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#9B8556">Skill Slot</font> 12
+2118765031||option_Mutagen_1_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#7E8185">Mutagen Slot</font> 1
+2118765032||option_Mutagen_2_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#7E8185">Mutagen Slot</font> 2
+2118765033||option_Mutagen_3_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#7E8185">Mutagen Slot</font> 3
+2118765034||option_Mutagen_4_Lvl|<font color="#D4A76F">Level</font> Required to Unlock <font color="#7E8185">Mutagen Slot</font> 4
+2118765035||option_Mutation_CostSlot_1|<font color="#708090">Mutations</font> Required to Unlock <font color="#808080">Bonus Skill Slot</font> 1
+2118765036||option_Mutation_CostSlot_2|<font color="#708090">Mutations</font> Required to Unlock <font color="#808080">Bonus Skill Slot</font> 2
+2118765037||option_Mutation_CostSlot_3|<font color="#708090">Mutations</font> Required to Unlock <font color="#808080">Bonus Skill Slot</font> 3
+2118765038||option_Mutation_CostSlot_4|<font color="#708090">Mutations</font> Required to Unlock <font color="#808080">Bonus Skill Slot</font> 4
+2118765039||option_Mutations_Colour_Locked|Lock <font color="#808080">Bonus Slots</font> to <font color="#708090">Mutation</font> Colour
+;
+; Reset Section
+2118765040||panel_Reset|<font color="#FF0000">Apply Changes</font>
+2118765041||preset_Mods_CSU_Reset|<font color="#FF0000">Reset to Apply Changes</font>
+2118765042||option_Mod_Cleardevelop|If you installed mod: (CE-NGE) Cleardevelop set this to on
+2118765043||option_Reset_Progression|Reset Progression
+;
+2118765044||preset_value_CSU_Preset_Default|<font color="#EFB700">Default</font>
+2118765045||preset_value_CSU_Preset_Half|<font color="#008A00">Half</font>
+2118765046||preset_value_CSU_Preset_Double|<font color="#8A0000">Double</font>
