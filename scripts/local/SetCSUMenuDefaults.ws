@@ -6,17 +6,16 @@
 function CSU_Initialize() {
     var currentVersion: float = 0.1;
     var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
-        
-    
+
     if (userVersion == currentVersion) {                                            // Up to date = early exit
         return;
     }
     
     // Skill Unlock Cost Init
-    if (userVersion < 0.1) {      
+    if (userVersion < 0.1) {                                                        // Apply default settings   
         CSUMenuSet('SkillUnlockCost', 'CSUSkillUnlockCostInit', true);
-        CSUMenuSet('SkillUnlockCost', 'ConfirmBuy', true);                // Apply default settings
-        CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', true);
+        CSUMenuSet('SkillUnlockCost', 'ConfirmBuy', true);                
+        CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', false);
         CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
         CSUMenuSet('SkillUnlockCost', 'SwordTier1', 6);
         CSUMenuSet('SkillUnlockCost', 'SwordTier2', 12);

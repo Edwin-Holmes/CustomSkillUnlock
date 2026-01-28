@@ -217,7 +217,9 @@
 
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
 	var am : W3PlayerAbilityManager;
-	wrappedMethod();
+	var retVal: bool;
+
+	retVal = wrappedMethod();
 	CSUCheckMenuResetToggle();
 	
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
@@ -225,6 +227,8 @@
 		am.SetSkillUnlockCosts();
 		am.UpdateSlotUnlocks();
 	}
+
+	return retVal;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
@@ -287,31 +291,27 @@
 }
 
 
-@wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill)
-{
-	var csu_skill : SSkill;
+@wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
+	var csu_skill: SSkill;
 	csu_skill = thePlayer.GetPlayerSkill(skillID);
 	
-	if (thePlayer.IsInCombat())
-	{
+	if (thePlayer.IsInCombat()) {
 		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
 		OnPlaySoundEvent("gui_global_denied");
+		return false;
 	}
-	else
-	{
-		if(!CSUGetConfirmBuy())
-		{
+	else {
+		if(!CSUGetConfirmBuy()) {
 			handleBuySkillConfirmation(skillID);
+			return true;
 		}
-		else
-		{
-			wrappedMethod(skillID);
+		else {
+			return wrappedMethod(skillID);
 		}
 	}
 }
 
-@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills() : void
-{
+@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills() : void {
 	var csu_i, csu_slotsCount : int;
 	var csu_curSlot      : SSkillSlot;
 	var csu_skillSlots   : array<SSkillSlot>;
@@ -332,13 +332,11 @@
 	
 	csu_equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
 	
-	if( csu_equippedMutationId != EPMT_None )
-	{
+	if( csu_equippedMutationId != EPMT_None ) {
 		csu_equippedMutation = GetWitcherPlayer().GetMutation( csu_equippedMutationId );
 	}
 	
-	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 )
-	{
+	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 ) {
 		csu_curSlot = csu_skillSlots[csu_i];
 		csu_equipedSkill = thePlayer.GetPlayerSkill( csu_curSlot.socketedSkill );
 		
@@ -352,13 +350,11 @@
 		csu_gfxSlots.SetMemberFlashBool( 'unlocked', csu_curSlot.unlocked );
 		
 			csu_colorBorderId = "";
-			if( csu_curSlot.id >= BSS_SkillSlot1 )
-			{
+			if( csu_curSlot.id >= BSS_SkillSlot1 ) {
 				csu_gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
 				csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( csu_curSlot.id - BSS_SkillSlot1 + 1 ) );
 				
-				if (csu_equippedMutationId != EPMT_None)
-				{
+				if (csu_equippedMutationId != EPMT_None) {
 					csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId );
 					
 					if( csu_colorsList.Contains(SC_Red) )
@@ -384,8 +380,7 @@
 				
 				csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
 			}
-		else
-		{
+		else {
 			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
 		}
 		

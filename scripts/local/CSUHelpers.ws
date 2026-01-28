@@ -130,8 +130,8 @@ function CSUShouldRowsUnlock() : bool {
     var rows : bool = CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
     var columns : bool = CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
     
-    // If both are disabled, force rows to true (vanilla behavior)
     if (!rows && !columns) {
+		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
         return true;
     }
     
