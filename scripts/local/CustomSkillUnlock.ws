@@ -269,15 +269,6 @@
     return wrappedMethod(mutationType);
 }
 
-@wrapMethod(CR4CharacterMenu) function CreateMutationFlashDataObj( curMutationId : EPlayerMutationType ) : CScriptedFlashObject
-{
-	var csu_mutationData : CScriptedFlashObject;
-	csu_mutationData = wrappedMethod(curMutationId);
-	if(CSUGetMutationsColourLocked()) {
-		csu_mutationData.SetMemberFlashArray( "colorsList", mutationColorList );
-	}
-	return csu_mutationData;
-}
 
 @wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill)
 {
@@ -367,9 +358,19 @@
 					{
 						csu_colorBorderId += "Blue";
 					}
+
+					// CSU Custom logic for Yellow
+					if( !CSUGetMutationsColourLocked() && csu_colorsList.Contains(SC_Yellow) )
+					{
+						csu_colorBorderId += "Yellow";
+					}
 				}
-				if(CSUGetMutationsColourLocked()){csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );} 
-		}
+				
+				if(CSUGetMutationsColourLocked())
+				{
+					csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
+				} 
+			}
 		else
 		{
 			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
@@ -381,29 +382,3 @@
 	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
 }
 
-@wrapMethod(CR4CharacterMenu) function SkillColorEnumToName( colorParam : ESkillColor ) : void
-{
-	var csu_equippedMutationId : EPlayerMutationType;
-	var csu_equippedMutation   : SMutation;
-	var csu_colorsList		   : array< ESkillColor >;
-	var csu_colorBorderId      : string;
-
-	wrappedMethod(colorParam);
-	
-	csu_equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
-
-	if( csu_equippedMutationId != EPMT_None && curSlot.id >= BSS_SkillSlot1 )
-	{
-		csu_equippedMutation = GetWitcherPlayer().GetMutation( csu_equippedMutationId );
-		csu_colorsList = csu_equippedMutation.colors;
-		
-		csu_colorBorderId = colorBorderId; // Accessing member if it exists, or needs to be handled
-		
-		if( !CSUGetMutationsColourLocked() && csu_colorsList.Contains(SC_Yellow) )
-		{
-			csu_colorBorderId += "Yellow";
-		}
-		
-		if (CSUGetMutationsColourLocked()) {gfxSlot.SetMemberFlashString( 'colorBorder', csu_colorBorderId );}
-	}
-}
