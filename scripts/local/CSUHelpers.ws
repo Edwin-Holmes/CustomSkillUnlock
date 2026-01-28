@@ -83,6 +83,11 @@ function CSUMenuInt(group: name, key: name, defaultValue: int): int {
     return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
 
+// Shorthand to get Int from menu
+function CSUMenuFloat(group: name, key: name, defaultValue: float): float {
+    return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
+}
+
 // Shorthand to get bool from menu
 function CSUMenuBool(group: name, key: name): bool {
 	return theGame.GetInGameConfigWrapper().GetVarValue(group, key);

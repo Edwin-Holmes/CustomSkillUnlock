@@ -5,7 +5,7 @@
 
 function CSU_Initialize() {
     var currentVersion: float = 0.1;
-    var userVersion: float = StringToFloat(modMenu.GetVarValue('SkillUnlockCost', 'CSUVersion'), 0.0);
+    var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
         
     
     if (userVersion == currentVersion) {                                            // Up to date = early exit
