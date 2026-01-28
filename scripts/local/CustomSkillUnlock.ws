@@ -196,10 +196,13 @@
 }
 
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
+	var am : W3PlayerAbilityManager;
 	wrappedMethod();
 	CSUCheckMenuResetToggle();
-	if (GetWitcherPlayer().abilityManager) {
-		GetWitcherPlayer().abilityManager.SetSkillUnlockCosts();
+	
+	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
+	if (am) {
+		am.SetSkillUnlockCosts();
 	}
 }
 
@@ -346,7 +349,7 @@
 				
 				if (csu_equippedMutationId != EPMT_None)
 				{
-					csu_colorsList = thePlayer.GetAbilitiesManager().GetMutationColors( csu_equippedMutationId );
+					csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId );
 					
 					if( csu_colorsList.Contains(SC_Red) )
 					{
@@ -380,5 +383,16 @@
 	}
 	
 	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
+}
+
+@wrapMethod(CR4CharacterMenu) function GetSkillGFxObject( skill : SSkill, isMutation : bool, flashObject : CScriptedFlashObject )
+{
+	wrappedMethod(skill, isMutation, flashObject);
+	
+	if ( !isMutation )
+	{
+		flashObject.SetMemberFlashBool( 'unlocked', true );
+		flashObject.SetMemberFlashInt( 'required', 0 );
+	}
 }
 
