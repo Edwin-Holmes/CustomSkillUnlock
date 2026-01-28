@@ -37,14 +37,14 @@ Adds a confirmation step when buying a skill to prevent accidental spending.
 | **Slot Level Unlocks** | 🧪 Needs Test | Needs verification in-game across different levels. |
 | **Mutagen Level Unlocks**| 🧪 Needs Test | Needs verification in-game. |
 | **Mutation Color Borders**| 🧪 Needs Test | Recently refactored to fix compiler errors. |
-| **NG+ Support** | ❌ Untested | Potential issues with level scaling or XML overrides. |
+| **NG+ Support** | ❌ Untested | Potential issues with level scaling or XML overrides. Perhaps does not touch unlock logic? |
 
 ---
 
 ## 📅 Roadmap & Future Ideas
 
 ### Planned Improvements
-- [ ] **Dynamic Cost Updates**: Find a way to apply new skill unlock costs instantly without requiring a character reset.
+- [✅] **Dynamic Cost Updates**: Find a way to apply new skill unlock costs instantly without requiring a character reset.
 - [ ] **UI Cleanup**: Remove the padlock icon and the "requirement number" from skill rows in the menu to match custom logic.
 
 ### Known Limitations

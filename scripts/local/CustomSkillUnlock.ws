@@ -145,6 +145,26 @@
 	}
 }
 
+@addMethod(W3PlayerAbilityManager) public function UpdateSlotUnlocks() {
+	var unlockLevel : array<int>;
+	var mutagenUnlockLevel : array<int>;
+	var i : int;
+
+	this.GetSlotUnlocks(unlockLevel);
+	for (i = 0; i < skillSlots.Size(); i += 1) {
+		if (i < unlockLevel.Size()) {
+			skillSlots[i].unlockedOnLevel = unlockLevel[i];
+		}
+	}
+
+	this.GetMutagenUnlocks(mutagenUnlockLevel);
+	for (i = 0; i < mutagenSlots.Size(); i += 1) {
+		if (i < mutagenUnlockLevel.Size()) {
+			mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
+		}
+	}
+}
+
 @addMethod(W3PlayerAbilityManager) private function GetMutagenUnlocks(out mutagenUnlockLevel : array<int>) {
 	//Fetch variables from menu
 	var mutagen1: int = CSUMenuInt('SlotUnlock', 'Mutagen1Lvl', 2);
@@ -203,6 +223,7 @@
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
 	if (am) {
 		am.SetSkillUnlockCosts();
+		am.UpdateSlotUnlocks();
 	}
 }
 
@@ -226,36 +247,13 @@
 }
 
 @wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {
-    var unlockLevel : array<int>;
-    var mutagenUnlockLevel : array<int>;
-    var i : int;
     wrappedMethod(isFromLoad);
-    
-    this.GetSlotUnlocks(unlockLevel);
-    for (i = 0; i < skillSlots.Size(); i += 1) {
-        if (i < unlockLevel.Size()) {
-            skillSlots[i].unlockedOnLevel = unlockLevel[i];
-        }
-    }
-
-    this.GetMutagenUnlocks(mutagenUnlockLevel);
-    for (i = 0; i < mutagenSlots.Size(); i += 1) {
-        if (i < mutagenUnlockLevel.Size()) {
-            mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
-        }
-    }
+    this.UpdateSlotUnlocks();
 }
 
 @wrapMethod(W3PlayerAbilityManager) function LoadMutagenSlotsDataFromXML() {
-    var mutagenUnlockLevel : array<int>;
-    var i : int;
     wrappedMethod();
-    this.GetMutagenUnlocks(mutagenUnlockLevel);
-    for (i = 0; i < mutagenSlots.Size(); i += 1) {
-        if (i < mutagenUnlockLevel.Size()) {
-            mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
-        }
-    }
+    this.UpdateSlotUnlocks();
 }
 
 @wrapMethod(W3PlayerAbilityManager) function GetMutationsRequiredForMasterStage( stage : int ) : int {
