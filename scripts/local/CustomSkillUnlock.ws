@@ -200,10 +200,10 @@
 	CSUCheckMenuResetToggle();
 }
 
-@wrapMethod(W3PlayerAbilityManager) function Init( ownerP : CActor, stats : W3CharacterStats, isTemporary : bool, difficultyMode : EDifficultyMode ) : bool {
+@wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
     var res : bool;
-    res = wrappedMethod(ownerP, stats, isTemporary, difficultyMode);
-    if (res && ownerP == thePlayer) {
+    res = wrappedMethod(ownr, cStats, isFromLoad, diff);
+    if (res && ownr == thePlayer) {
         this.SetSkillUnlockCosts();
     }
     return res;
@@ -219,19 +219,28 @@
     return wrappedMethod(skill);
 }
 
-@wrapMethod(W3PlayerAbilityManager) function InitSkillSlots() {
+@wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {
     var unlockLevel : array<int>;
+    var mutagenUnlockLevel : array<int>;
     var i : int;
-    wrappedMethod();
+    wrappedMethod(isFromLoad);
+    
     this.GetSlotUnlocks(unlockLevel);
     for (i = 0; i < skillSlots.Size(); i += 1) {
         if (i < unlockLevel.Size()) {
             skillSlots[i].unlockedOnLevel = unlockLevel[i];
         }
     }
+
+    this.GetMutagenUnlocks(mutagenUnlockLevel);
+    for (i = 0; i < mutagenSlots.Size(); i += 1) {
+        if (i < mutagenUnlockLevel.Size()) {
+            mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
+        }
+    }
 }
 
-@wrapMethod(W3PlayerAbilityManager) function InitMutagenSlots() {
+@wrapMethod(W3PlayerAbilityManager) function LoadMutagenSlotsDataFromXML() {
     var mutagenUnlockLevel : array<int>;
     var i : int;
     wrappedMethod();
