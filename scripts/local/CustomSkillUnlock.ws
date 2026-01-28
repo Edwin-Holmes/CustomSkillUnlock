@@ -264,6 +264,7 @@
         allColors.PushBack(SC_Blue);
         allColors.PushBack(SC_Red);
         allColors.PushBack(SC_Green);
+        allColors.PushBack(SC_Yellow); // Allow General skills
         return allColors;
     }
     return wrappedMethod(mutationType);
@@ -342,7 +343,7 @@
 				
 				if (csu_equippedMutationId != EPMT_None)
 				{
-					csu_colorsList = csu_equippedMutation.colors;
+					csu_colorsList = thePlayer.GetAbilitiesManager().GetMutationColors( csu_equippedMutationId );
 					
 					if( csu_colorsList.Contains(SC_Red) )
 					{
@@ -359,17 +360,13 @@
 						csu_colorBorderId += "Blue";
 					}
 
-					// CSU Custom logic for Yellow
-					if( !CSUGetMutationsColourLocked() && csu_colorsList.Contains(SC_Yellow) )
+					if( csu_colorsList.Contains(SC_Yellow) )
 					{
 						csu_colorBorderId += "Yellow";
 					}
 				}
 				
-				if(CSUGetMutationsColourLocked())
-				{
-					csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
-				} 
+				csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
 			}
 		else
 		{
