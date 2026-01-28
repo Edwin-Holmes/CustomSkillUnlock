@@ -81,14 +81,20 @@
 	var tierCosts		: array<int>;  
 	var costIndex		: int; 
 	var skill			: ESkill;
-    var i 				: int;
+    var i, j			: int;
 	
 	GetSkillTierCosts(playerSkills, tierCosts);
 
-	for( i = 0; i < skills.Size(); i += 1 )
-	{
+	for( i = 0; i < skills.Size(); i += 1 ) {
         skill = skills[i].skillType;
-        costIndex = CSUFindSkillIndex(skill, playerSkills);
+        costIndex = -1;
+        for (j = 0; j < playerSkills.Size(); j += 1) {
+            if (playerSkills[j] == skill) {
+                costIndex = j;
+                break;
+            }
+        }
+
         if (costIndex != -1) 
         {
             skills[i].requiredPointsSpent = tierCosts[costIndex];
