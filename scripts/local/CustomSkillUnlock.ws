@@ -76,7 +76,7 @@
 	playerSkills.PushBack(S_Alchemy_s17);   tierCosts.PushBack(alchemyTier3);
 }
 
-@addMethod(W3PlayerAbilityManager) private function SetSkillUnlockCosts() {
+@addMethod(W3PlayerAbilityManager) public function SetSkillUnlockCosts() {
 	var playerSkills	: array<ESkill>;
 	var tierCosts		: array<int>;  
 	var costIndex		: int; 
@@ -198,6 +198,9 @@
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
 	wrappedMethod();
 	CSUCheckMenuResetToggle();
+	if (GetWitcherPlayer().abilityManager) {
+		GetWitcherPlayer().abilityManager.SetSkillUnlockCosts();
+	}
 }
 
 @wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
