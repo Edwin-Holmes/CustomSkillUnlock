@@ -237,13 +237,25 @@
 }
 
 @wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill) : bool {
-    if (this.IsColumnRequirementMet(skill)) return true;
-    return wrappedMethod(skill);
+    var columnMet : bool = this.IsColumnRequirementMet(skill);
+    var rowMet : bool = false;
+    
+    if (CSUShouldRowsUnlock()) {
+        rowMet = wrappedMethod(skill);
+    }
+    
+    return columnMet || rowMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill) : bool {
-    if (this.IsColumnRequirementMet(skill)) return true;
-    return wrappedMethod(skill);
+    var columnMet : bool = this.IsColumnRequirementMet(skill);
+    var rowMet : bool = false;
+    
+    if (CSUShouldRowsUnlock()) {
+        rowMet = wrappedMethod(skill);
+    }
+    
+    return columnMet || rowMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {

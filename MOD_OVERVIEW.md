@@ -45,7 +45,3 @@ Adds a confirmation step when buying a skill to prevent accidental spending.
 
 ### Planned Improvements
 - [✅] **Dynamic Cost Updates**: Find a way to apply new skill unlock costs instantly without requiring a character reset.
-- [ ] **UI Cleanup**: Remove the padlock icon and the "requirement number" from skill rows in the menu to match custom logic.
-
-### Known Limitations
-- Currently requires a progression reset (via menu toggle) to apply changes to skill tier requirements if they have already been initialized.
