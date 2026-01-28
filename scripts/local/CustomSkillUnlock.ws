@@ -385,14 +385,3 @@
 	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
 }
 
-@wrapMethod(CR4CharacterMenu) function GetSkillGFxObject( skill : SSkill, isMutation : bool, flashObject : CScriptedFlashObject )
-{
-	wrappedMethod(skill, isMutation, flashObject);
-	
-	if ( !isMutation )
-	{
-		flashObject.SetMemberFlashBool( 'unlocked', true );
-		flashObject.SetMemberFlashInt( 'required', 0 );
-	}
-}
-
