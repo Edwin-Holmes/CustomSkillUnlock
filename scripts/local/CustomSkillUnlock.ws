@@ -316,6 +316,8 @@
 	var csu_colorsList		   : array< ESkillColor >;
 	var csu_colorBorderId      : string;
 	
+	wrappedMethod();
+
 	csu_skillSlots = thePlayer.GetSkillSlots();
 	csu_slotsCount = csu_skillSlots.Size();
 	csu_gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
