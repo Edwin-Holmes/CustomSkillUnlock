@@ -3,14 +3,6 @@ struct ColumnUnlockPair {
     var childSkill: ESkill;
 };
 
-// Track unlocked skills in columns
-@addField(W3PlayerAbilityManager) 
-private var columnUnlockedSkills: array<ESkill>;
-
-@addMethod(W3PlayerAbilityManager) private function InitColumnArray() {
-    columnUnlockedSkills.Clear(); // Initialize empty list
-}
-
 // Initialize and return skill dependencies
 @addMethod(W3PlayerAbilityManager) private function GetColumnUnlockPairs() : array<ColumnUnlockPair> {
     var columnPairs: array<ColumnUnlockPair>;
@@ -70,24 +62,25 @@ private var columnUnlockedSkills: array<ESkill>;
     return columnPairs;
 }
 
-// Push unlocked skills to the columnUnlockedSkills array
-@addMethod(W3PlayerAbilityManager) public function UpdateColumnUnlocks() {  
-    var skills: array<SSkill> = thePlayer.GetPlayerSkills(); // Retrieve the player's skills  
-    var columnPairs: array<ColumnUnlockPair> = GetColumnUnlockPairs();
-    var i: int;  
-    var parentSkillIndex: int;  
-    var childSkillIndex: int;  
-  
-    // Check each pair
-    for (i = 0; i < columnPairs.Size(); i += 1) {
-        parentSkillIndex = CSUFindSkillIndex(columnPairs[i].parentSkill, skills);  
-        // Check parent is max level
-        if (parentSkillIndex != -1 && skills[parentSkillIndex].level == skills[parentSkillIndex].maxLevel) {  
-            childSkillIndex = CSUFindSkillIndex(columnPairs[i].childSkill, skills);  
-  
-            if (childSkillIndex != -1 && !columnUnlockedSkills.Contains(columnPairs[i].childSkill)) {  
-                columnUnlockedSkills.PushBack(columnPairs[i].childSkill); // Track unlocked skill  
-            }  
-        }  
-    }  
+@addMethod(W3PlayerAbilityManager)
+public function IsColumnRequirementMet(skill : ESkill) : bool {
+    var pairs : array<ColumnUnlockPair>;
+    var i : int;
+    var skills : array<SSkill>;
+    var parentIndex : int;
+
+    if (!CSUShouldColumnsUnlock()) return false;
+
+    pairs = this.GetColumnUnlockPairs();
+    skills = thePlayer.GetPlayerSkills();
+
+    for (i = 0; i < pairs.Size(); i += 1) {
+        if (pairs[i].childSkill == skill) {
+            parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);
+            if (parentIndex != -1 && skills[parentIndex].level == skills[parentIndex].maxLevel) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
