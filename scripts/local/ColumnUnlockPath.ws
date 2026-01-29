@@ -62,31 +62,29 @@ struct ColumnUnlockPair {
     return columnPairs;
 }
 
-@addMethod(W3PlayerAbilityManager)
-public function IsColumnRequirementMet(skill : ESkill) : bool {
-    var pairs : array<ColumnUnlockPair>;
-    var i : int;
-    var skills : array<SSkill>;
-    var parentIndex : int;
+@addMethod(W3PlayerAbilityManager) public function IsColumnRequirementMet(skill : ESkill) : bool {
+    var pairs: array<ColumnUnlockPair>;
+    var i: int;
+    var skills: array<SSkill>;
+    var parentIndex: int;
 
-    if (!CSUShouldColumnsUnlock()) return false;
+    if (!CSUShouldColumnsUnlock()) {
+        return false;
+    }
 
     pairs = this.GetColumnUnlockPairs();
     skills = thePlayer.GetPlayerSkills();
 
     for (i = 0; i < pairs.Size(); i += 1) {
-        if (pairs[i].childSkill == skill) {
-            // It is a child node, check if parent is maxed
-            parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);
+        if (pairs[i].childSkill == skill) {                                 //Find child skill
+            parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);  //Find parent skill
             if (parentIndex != -1 && skills[parentIndex].level == skills[parentIndex].maxLevel) {
-                return true;
+                return true;                                                //Parent skill maxed; unlock
             }
-            // If parent not maxed, it is locked
-            return false;
+
+            return false;                                                   //Parent skill not maxed; stay locked    
         }
     }
     
-    // If we're here, it was never a child. 
-    // It is effectively a Root or Independent skill -> Unlock it.
-    return true;
+    return true;                                                            //Not a child skill (i.e. Root or General); unlock
 }

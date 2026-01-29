@@ -46,27 +46,6 @@ function CSUCheckMenuResetToggle() {
 		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
 }
 
-// Shorthand to get Int from menu
-function CSUMenuInt(group: name, key: name, defaultValue: int): int {
-    return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
-}
-
-// Shorthand to get Int from menu
-function CSUMenuFloat(group: name, key: name, defaultValue: float): float {
-    return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
-}
-
-// Shorthand to get bool from menu
-function CSUMenuBool(group: name, key: name): bool {
-	return theGame.GetInGameConfigWrapper().GetVarValue(group, key);
-}
-
-// Shorthand to set menu values
-function CSUMenuSet(groupName : name, varName : name, varValue : string) {
-    return theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
-}
-
-// Find index of skill in an array
 function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skills.Size(); i += 1) {
@@ -78,12 +57,25 @@ function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
     return -1;
 }
 
-function CSUGetConfirmBuy() : bool {
-    return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
+// Shorthand to set/get values from menu
+function CSUMenuInt(group: name, key: name, defaultValue: int): int {
+    return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
 
-function CSUHasModCleardevelop() : bool {
-    return CSUMenuBool('CSUReset', 'ModCleardevelop');
+function CSUMenuFloat(group: name, key: name, defaultValue: float): float {
+    return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
+}
+
+function CSUMenuBool(group: name, key: name): bool {
+	return theGame.GetInGameConfigWrapper().GetVarValue(group, key);
+}
+
+function CSUMenuSet(groupName : name, varName : name, varValue : string) {
+    return theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
+}
+
+function CSUGetConfirmBuy() : bool {
+    return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
 }
 
 function CSUGetMutationsColourLocked() : bool {
@@ -95,14 +87,6 @@ function CSUShouldColumnsUnlock() : bool {
 }
 
 function CSUShouldRowsUnlock() : bool {
-    var rows : bool = CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
-    var columns : bool = CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
-    
-    if (!rows && !columns) {
-		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
-        return true;
-    }
-    
-    return rows;
+    return CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
 }
 

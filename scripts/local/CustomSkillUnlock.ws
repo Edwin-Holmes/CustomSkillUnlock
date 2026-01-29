@@ -95,8 +95,7 @@
             }
         }
 
-        if (costIndex != -1) 
-        {
+        if (costIndex != -1) {
             skills[i].requiredPointsSpent = tierCosts[costIndex];
         }
     }
@@ -219,13 +218,17 @@
 	var am : W3PlayerAbilityManager;
 	var retVal: bool;
 
-	retVal = wrappedMethod();
-	CSUCheckMenuResetToggle();
+	retVal = wrappedMethod();											//Store vanilla bool return value
+	CSUCheckMenuResetToggle();											//Check reset skills/slots toggle
 	
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
 	if (am) {
-		am.SetSkillUnlockCosts();
-		am.UpdateSlotUnlocks();
+		am.SetSkillUnlockCosts();										//Update skill/slot costs
+		am.UpdateSlotUnlocks();											//Update skill/slot unlock levels
+	}
+
+	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
+		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
 	}
 
 	return retVal;
