@@ -4,12 +4,19 @@
 }
 
 function CSU_Initialize() {
+    var currentVersion: float = 0.1;
+    var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
+
+    if (userVersion == currentVersion) {                                            // Up to date = early exit
+        return;
+    }
+    
     // Skill Unlock Cost Init
-    if (!CSUMenuBool('SkillUnlockCost', 'CSUSkillUnlockCostInit')) {      // Check for existence of settings
-        CSUMenuSet('SkillUnlockCost', 'CSUSkillUnlockCostInit', true);    // Were defaults ever applied?
-        CSUMenuSet('SkillUnlockCost', 'ConfirmBuy', true);                // Apply default settings
-        CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', true);
-        //CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
+    if (userVersion < 0.1) {                                                        // Apply default settings   
+        CSUMenuSet('SkillUnlockCost', 'CSUSkillUnlockCostInit', true);
+        CSUMenuSet('SkillUnlockCost', 'ConfirmBuy', true);                
+        CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', false);
+        CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
         CSUMenuSet('SkillUnlockCost', 'SwordTier1', 6);
         CSUMenuSet('SkillUnlockCost', 'SwordTier2', 12);
         CSUMenuSet('SkillUnlockCost', 'SwordTier3', 18);
@@ -19,10 +26,7 @@ function CSU_Initialize() {
         CSUMenuSet('SkillUnlockCost', 'AlchemyTier1', 6);
         CSUMenuSet('SkillUnlockCost', 'AlchemyTier2', 12);
         CSUMenuSet('SkillUnlockCost', 'AlchemyTier3', 18);
-    }
     // Slot Unlock Level Init
-    if (!CSUMenuBool('SlotUnlock', 'CSUSlotUnlockInit')) {
-        CSUMenuSet('SlotUnlock', 'CSUSlotUnlockInit', true);
         CSUMenuSet('SlotUnlock', 'Slot1Lvl', 0);
         CSUMenuSet('SlotUnlock', 'Slot2Lvl', 2);
         CSUMenuSet('SlotUnlock', 'Slot3Lvl', 4);
@@ -44,12 +48,12 @@ function CSU_Initialize() {
         CSUMenuSet('SlotUnlock', 'MutationCostSlot3', 8);
         CSUMenuSet('SlotUnlock', 'MutationCostSlot4', 12);
         CSUMenuSet('SlotUnlock', 'MutationsColourLocked', true);
-    }
     // Reset Toggle Init
-    if (!CSUMenuBool('CSUReset', 'CSUResetInit')) {
-        CSUMenuSet('CSUReset', 'CSUResetInit', true);
-        CSUMenuSet('CSUReset', 'ModCleardevelop', false);
         CSUMenuSet('CSUReset', 'ResetProgression', false);
     }
+
+    if (userVersion < currentVersion) {
+        CSUMenuSet('SkillUnlockCost', 'CSUVersion', currentVersion);
+    }   
 
 }

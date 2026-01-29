@@ -76,21 +76,26 @@
 	playerSkills.PushBack(S_Alchemy_s17);   tierCosts.PushBack(alchemyTier3);
 }
 
-@addMethod(W3PlayerAbilityManager) private function SetSkillUnlockCosts() {
+@addMethod(W3PlayerAbilityManager) public function SetSkillUnlockCosts() {
 	var playerSkills	: array<ESkill>;
 	var tierCosts		: array<int>;  
 	var costIndex		: int; 
 	var skill			: ESkill;
-    var i 				: int;
+    var i, j			: int;
 	
 	GetSkillTierCosts(playerSkills, tierCosts);
 
-	for( i = 0; i < skills.Size(); i += 1 )
-	{
+	for( i = 0; i < skills.Size(); i += 1 ) {
         skill = skills[i].skillType;
-        costIndex = CSUFindSkillIndex(skill, playerSkills);
-        if (costIndex != -1) 
-        {
+        costIndex = -1;
+        for (j = 0; j < playerSkills.Size(); j += 1) {
+            if (playerSkills[j] == skill) {
+                costIndex = j;
+                break;
+            }
+        }
+
+        if (costIndex != -1) {
             skills[i].requiredPointsSpent = tierCosts[costIndex];
         }
     }
@@ -136,6 +141,26 @@
 	    {
 	        unlockLevel[i] = unlockLevel[i-1];
 	    }
+	}
+}
+
+@addMethod(W3PlayerAbilityManager) public function UpdateSlotUnlocks() {
+	var unlockLevel : array<int>;
+	var mutagenUnlockLevel : array<int>;
+	var i : int;
+
+	this.GetSlotUnlocks(unlockLevel);
+	for (i = 0; i < skillSlots.Size(); i += 1) {
+		if (i < unlockLevel.Size()) {
+			skillSlots[i].unlockedOnLevel = unlockLevel[i];
+		}
+	}
+
+	this.GetMutagenUnlocks(mutagenUnlockLevel);
+	for (i = 0; i < mutagenSlots.Size(); i += 1) {
+		if (i < mutagenUnlockLevel.Size()) {
+			mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
+		}
 	}
 }
 
@@ -190,6 +215,181 @@
 }
 
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
-	wrappedMethod();
-	CSUCheckMenuResetToggle();
+	var am : W3PlayerAbilityManager;
+	var retVal: bool;
+
+	retVal = wrappedMethod();											//Store vanilla bool return value
+	CSUCheckMenuResetToggle();											//Check reset skills/slots toggle
+	
+	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
+	if (am) {
+		am.SetSkillUnlockCosts();										//Update skill/slot costs
+		am.UpdateSlotUnlocks();											//Update skill/slot unlock levels
+	}
+
+	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
+		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
+	}
+
+	return retVal;
 }
+
+@wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
+    var res : bool;
+    res = wrappedMethod(ownr, cStats, isFromLoad, diff);
+    if (res && ownr == thePlayer) {
+        this.SetSkillUnlockCosts();
+    }
+    return res;
+}
+
+@wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill) : bool {
+    var columnMet : bool = this.IsColumnRequirementMet(skill);
+    var rowMet : bool = false;
+    
+    if (CSUShouldRowsUnlock()) {
+        rowMet = wrappedMethod(skill);
+    }
+    
+    return columnMet || rowMet;
+}
+
+@wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill) : bool {
+    var columnMet : bool = this.IsColumnRequirementMet(skill);
+    var rowMet : bool = false;
+    
+    if (CSUShouldRowsUnlock()) {
+        rowMet = wrappedMethod(skill);
+    }
+    
+    return columnMet || rowMet;
+}
+
+@wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {
+    wrappedMethod(isFromLoad);
+    this.UpdateSlotUnlocks();
+}
+
+@wrapMethod(W3PlayerAbilityManager) function LoadMutagenSlotsDataFromXML() {
+    wrappedMethod();
+    this.UpdateSlotUnlocks();
+}
+
+@wrapMethod(W3PlayerAbilityManager) function GetMutationsRequiredForMasterStage( stage : int ) : int {
+    var customMutationsReq : int = this.GetCustomMutationsForUnlock(stage);
+    if (customMutationsReq >= 0) return customMutationsReq;
+    return wrappedMethod(stage);
+}
+
+@wrapMethod(W3PlayerAbilityManager) function GetMutationColors( mutationType : EPlayerMutationType ) : array< ESkillColor > {
+    var allColors : array< ESkillColor >;
+    if (!CSUGetMutationsColourLocked()) {
+        allColors.PushBack(SC_Blue);
+        allColors.PushBack(SC_Red);
+        allColors.PushBack(SC_Green);
+        allColors.PushBack(SC_Yellow); // Allow General skills
+        return allColors;
+    }
+    return wrappedMethod(mutationType);
+}
+
+
+@wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
+	var csu_skill: SSkill;
+	csu_skill = thePlayer.GetPlayerSkill(skillID);
+	
+	if (thePlayer.IsInCombat()) {
+		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
+		OnPlaySoundEvent("gui_global_denied");
+		return false;
+	}
+	else {
+		if(!CSUGetConfirmBuy()) {
+			handleBuySkillConfirmation(skillID);
+			return true;
+		}
+		else {
+			return wrappedMethod(skillID);
+		}
+	}
+}
+
+@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills() : void {
+	var csu_i, csu_slotsCount : int;
+	var csu_curSlot      : SSkillSlot;
+	var csu_skillSlots   : array<SSkillSlot>;
+	var csu_equipedSkill : SSkill;
+	var csu_gfxSlots     : CScriptedFlashObject;
+	var csu_gfxSlotsList : CScriptedFlashArray;
+	
+	var csu_equippedMutationId : EPlayerMutationType;
+	var csu_equippedMutation   : SMutation;
+	var csu_colorsList		   : array< ESkillColor >;
+	var csu_colorBorderId      : string;
+	
+	wrappedMethod();
+
+	csu_skillSlots = thePlayer.GetSkillSlots();
+	csu_slotsCount = csu_skillSlots.Size();
+	csu_gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
+	
+	csu_equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
+	
+	if( csu_equippedMutationId != EPMT_None ) {
+		csu_equippedMutation = GetWitcherPlayer().GetMutation( csu_equippedMutationId );
+	}
+	
+	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 ) {
+		csu_curSlot = csu_skillSlots[csu_i];
+		csu_equipedSkill = thePlayer.GetPlayerSkill( csu_curSlot.socketedSkill );
+		
+		csu_gfxSlots = m_flashValueStorage.CreateTempFlashObject();
+		GetSkillGFxObject( csu_equipedSkill, false, csu_gfxSlots );
+		
+		csu_gfxSlots.SetMemberFlashInt( 'tabId', GetTabForSkill( csu_curSlot.socketedSkill ) );
+		csu_gfxSlots.SetMemberFlashInt( 'slotId', csu_curSlot.id );
+		csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
+		csu_gfxSlots.SetMemberFlashInt( 'groupID', csu_curSlot.groupID );
+		csu_gfxSlots.SetMemberFlashBool( 'unlocked', csu_curSlot.unlocked );
+		
+			csu_colorBorderId = "";
+			if( csu_curSlot.id >= BSS_SkillSlot1 ) {
+				csu_gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
+				csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( csu_curSlot.id - BSS_SkillSlot1 + 1 ) );
+				
+				if (csu_equippedMutationId != EPMT_None) {
+					csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId );
+					
+					if( csu_colorsList.Contains(SC_Red) )
+					{
+						csu_colorBorderId += "Red";
+					}
+					
+					if( csu_colorsList.Contains(SC_Green) )
+					{
+						csu_colorBorderId += "Green";
+					}
+					
+					if( csu_colorsList.Contains(SC_Blue) )
+					{
+						csu_colorBorderId += "Blue";
+					}
+
+					if( csu_colorsList.Contains(SC_Yellow) )
+					{
+						csu_colorBorderId += "Yellow";
+					}
+				}
+				
+				csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
+			}
+		else {
+			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
+		}
+		
+		csu_gfxSlotsList.PushBackFlashObject( csu_gfxSlots );
+	}
+	
+	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
+}
+

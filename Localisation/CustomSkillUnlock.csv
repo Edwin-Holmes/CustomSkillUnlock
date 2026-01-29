@@ -55,9 +55,8 @@
 2118765039||option_Mutations_Colour_Locked|Lock <font color="#808080">Bonus Slots</font> to <font color="#708090">Mutation</font> Colour
 ;
 ; Reset Section
-2118765040||panel_Reset|<font color="#FF0000">Apply Changes</font>
-2118765041||preset_Mods_CSU_Reset|<font color="#FF0000">Reset to Apply Changes</font>
-2118765042||option_Mod_Cleardevelop|If you installed mod: (CE-NGE) Cleardevelop set this to on
+2118765040||panel_Reset|<font color="#FF0000">Reset Character</font>
+2118765041||preset_Mods_CSU_Reset|<font color="#FF0000">Reset Character Progression</font>
 2118765043||option_Reset_Progression|Reset Progression
 ;
 2118765044||preset_value_CSU_Preset_Default|<font color="#EFB700">Default</font>

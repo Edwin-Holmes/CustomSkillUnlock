@@ -1,19 +1,10 @@
 function CSUCheckMenuResetToggle() {
-    var resetEnabled : bool = CSUMenuBool('CSUReset', 'ResetProgression');
-    var player : W3PlayerWitcher = GetWitcherPlayer();
+    var resetEnabled: bool = CSUMenuBool('CSUReset', 'ResetProgression');
+    var wp: W3PlayerWitcher = GetWitcherPlayer();
 
-    if (resetEnabled) //Check toggle
-    {
-        if (!CSUHasModCleardevelop())
-        {
-            player.CSUPlayerReset();
-            CSUMenuSet('CSUReset', 'ResetProgression', false); //Revert toggle to false
-        } 
-        else
-        {
-            player.Debug_ClearCharacterDevelopment(); //Reset Progression using modified function
-            CSUMenuSet('CSUReset', 'ResetProgression', false); //Revert toggle to false
-        }
+    if (resetEnabled) { 										//Check menu toggle
+        wp.CSUPlayerReset();
+        CSUMenuSet('CSUReset', 'ResetProgression', false); 		//Revert menu toggle to false 
     }
 }
 
@@ -21,7 +12,7 @@ function CSUCheckMenuResetToggle() {
 		// Vanilla cleardevelop without any inventory logic
 		var i : int;
 		var abs : array<name>;
-		var playerLevel: int = this.GetLevel();
+		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
 	
 		delete abilityManager;
 		delete levelManager;
@@ -52,48 +43,9 @@ function CSUCheckMenuResetToggle() {
 		
 		abilityManager.PostInit();
 
-		CSUSetLevel(playerLevel);		//Restore player level			
+		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
 }
 
-// Give player a specific level
-function CSUSetLevel(targetLvl: int) {
-	// Identical to exec function in temp.ws
-	var lm : W3PlayerWitcher;
-	var exp, prevLvl, currLvl : int;
-	
-	lm = GetWitcherPlayer();
-	prevLvl = lm.GetLevel();
-	currLvl = lm.GetLevel();
-		
-	while(currLvl < targetLvl)
-	{
-		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
-		lm.AddPoints(EExperiencePoint, exp, false);
-		currLvl = lm.GetLevel();
-		
-		if(prevLvl == currLvl)
-			break;				
-		
-		prevLvl = currLvl;
-	}	
-}
-
-// Shorthand to get Int from menu
-function CSUMenuInt(group: name, key: name, defaultValue: int): int {
-    return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
-}
-
-// Shorthand to get bool from menu
-function CSUMenuBool(group: name, key: name): bool {
-	return theGame.GetInGameConfigWrapper().GetVarValue(group, key);
-}
-
-// Shorthand to set menu values
-function CSUMenuSet(groupName : name, varName : name, varValue : string) {
-    return theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
-}
-
-// Find index of skill in an array
 function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skills.Size(); i += 1) {
@@ -105,12 +57,25 @@ function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
     return -1;
 }
 
-function CSUGetConfirmBuy() : bool {
-    return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
+// Shorthand to set/get values from menu
+function CSUMenuInt(group: name, key: name, defaultValue: int): int {
+    return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
 
-function CSUHasModCleardevelop() : bool {
-    return CSUMenuBool('CSUReset', 'ModCleardevelop');
+function CSUMenuFloat(group: name, key: name, defaultValue: float): float {
+    return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
+}
+
+function CSUMenuBool(group: name, key: name): bool {
+	return theGame.GetInGameConfigWrapper().GetVarValue(group, key);
+}
+
+function CSUMenuSet(groupName : name, varName : name, varValue : string) {
+    return theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
+}
+
+function CSUGetConfirmBuy() : bool {
+    return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
 }
 
 function CSUGetMutationsColourLocked() : bool {
@@ -119,5 +84,9 @@ function CSUGetMutationsColourLocked() : bool {
 
 function CSUShouldColumnsUnlock() : bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
+}
+
+function CSUShouldRowsUnlock() : bool {
+    return CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
 }
 
