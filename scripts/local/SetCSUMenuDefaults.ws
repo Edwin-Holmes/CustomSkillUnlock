@@ -48,11 +48,7 @@ function CSU_Initialize() {
         CSUMenuSet('SlotUnlock', 'MutationCostSlot3', 8);
         CSUMenuSet('SlotUnlock', 'MutationCostSlot4', 12);
         CSUMenuSet('SlotUnlock', 'MutationsColourLocked', true);
-    }
     // Reset Toggle Init
-    if (!CSUMenuBool('CSUReset', 'CSUResetInit')) {
-        CSUMenuSet('CSUReset', 'CSUResetInit', true);
-        CSUMenuSet('CSUReset', 'ModCleardevelop', false);
         CSUMenuSet('CSUReset', 'ResetProgression', false);
     }
 

@@ -1,19 +1,10 @@
 function CSUCheckMenuResetToggle() {
-    var resetEnabled : bool = CSUMenuBool('CSUReset', 'ResetProgression');
-    var player : W3PlayerWitcher = GetWitcherPlayer();
+    var resetEnabled: bool = CSUMenuBool('CSUReset', 'ResetProgression');
+    var wp: W3PlayerWitcher = GetWitcherPlayer();
 
-    if (resetEnabled) //Check toggle
-    {
-        if (!CSUHasModCleardevelop())
-        {
-            player.CSUPlayerReset();
-            CSUMenuSet('CSUReset', 'ResetProgression', false); //Revert toggle to false
-        } 
-        else
-        {
-            player.Debug_ClearCharacterDevelopment(); //Reset Progression using modified function
-            CSUMenuSet('CSUReset', 'ResetProgression', false); //Revert toggle to false
-        }
+    if (resetEnabled) { 										//Check menu toggle
+        wp.CSUPlayerReset();
+        CSUMenuSet('CSUReset', 'ResetProgression', false); 		//Revert menu toggle to false 
     }
 }
 
@@ -53,29 +44,6 @@ function CSUCheckMenuResetToggle() {
 		abilityManager.PostInit();
 
 		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
-}
-
-// Give player a specific level
-function CSUSetLevel(targetLvl: int) {
-	// Identical to exec function in temp.ws
-	var lm : W3PlayerWitcher;
-	var exp, prevLvl, currLvl : int;
-	
-	lm = GetWitcherPlayer();
-	prevLvl = lm.GetLevel();
-	currLvl = lm.GetLevel();
-		
-	while(currLvl < targetLvl)
-	{
-		exp = lm.GetTotalExpForNextLevel() - lm.GetPointsTotal(EExperiencePoint);
-		lm.AddPoints(EExperiencePoint, exp, false);
-		currLvl = lm.GetLevel();
-		
-		if(prevLvl == currLvl)
-			break;				
-		
-		prevLvl = currLvl;
-	}	
 }
 
 // Shorthand to get Int from menu
