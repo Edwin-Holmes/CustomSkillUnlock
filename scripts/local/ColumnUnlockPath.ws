@@ -68,19 +68,35 @@ public function IsColumnRequirementMet(skill : ESkill) : bool {
     var i : int;
     var skills : array<SSkill>;
     var parentIndex : int;
+    var isParent : bool;
 
     if (!CSUShouldColumnsUnlock()) return false;
 
     pairs = this.GetColumnUnlockPairs();
     skills = thePlayer.GetPlayerSkills();
+    isParent = false;
 
     for (i = 0; i < pairs.Size(); i += 1) {
         if (pairs[i].childSkill == skill) {
+            // It is a child node, check if parent is maxed
             parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);
             if (parentIndex != -1 && skills[parentIndex].level == skills[parentIndex].maxLevel) {
                 return true;
             }
+            // If parent not maxed, it is locked (cannot be a root if it is a child)
+            return false;
+        }
+        
+        if (pairs[i].parentSkill == skill) {
+            isParent = true;
         }
     }
+    
+    // If we're here, it was never a child.
+    // If it is a parent in the system, it's a Root skill -> Unlock it.
+    if (isParent) {
+        return true;
+    }
+
     return false;
 }
