@@ -21,7 +21,7 @@ function CSUCheckMenuResetToggle() {
 		// Vanilla cleardevelop without any inventory logic
 		var i : int;
 		var abs : array<name>;
-		var playerLevel: int = this.GetLevel();
+		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
 	
 		delete abilityManager;
 		delete levelManager;
@@ -52,7 +52,7 @@ function CSUCheckMenuResetToggle() {
 		
 		abilityManager.PostInit();
 
-		CSUSetLevel(playerLevel);		//Restore player level			
+		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
 }
 
 // Give player a specific level
