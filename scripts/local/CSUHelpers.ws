@@ -46,12 +46,11 @@ function CSUCheckMenuResetToggle() {
 		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
 }
 
-function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
+function CSUFindSkillIndex(skillName: ESkill, skills: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skills.Size(); i += 1) {
-        if (skills[i].skillType == skillType) 
-        {
-            return i;
+        if (skills[i].skillName == skillName) { 		//Loook thorugh SSkill array for an ESkill	
+            return i;									//Return index of skill if found
         }
     }
     return -1;
