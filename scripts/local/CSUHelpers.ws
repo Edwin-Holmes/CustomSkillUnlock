@@ -8,48 +8,10 @@ function CSUCheckMenuResetToggle() {
     }
 }
 
-@addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
-		// Vanilla cleardevelop without any inventory logic
-		var i : int;
-		var abs : array<name>;
-		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
-	
-		delete abilityManager;
-		delete levelManager;
-		delete effectManager;
-		
-		
-		GetCharacterStats().GetAbilities(abs, false);
-		for(i=0; i<abs.Size(); i+=1)
-			RemoveAbility(abs[i]);
-			
-		
-		abs.Clear();
-		GetCharacterStatsParam(abs);		
-		for(i=0; i<abs.Size(); i+=1)
-			AddAbility(abs[i]);
-					
-		
-		levelManager = new W3LevelManager in this;			
-		levelManager.Initialize();
-		levelManager.PostInit(this, false, true);		
-						
-		
-		AddAbility('GeraltSkills_Testing');
-		SetAbilityManager();		
-		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
-		
-		SetEffectManager();
-		
-		abilityManager.PostInit();
-
-		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
-}
-
-function CSUFindSkillIndex(skillName: ESkill, skills: array<SSkill>): int {
+function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skills.Size(); i += 1) {
-        if (skills[i].skillName == skillName) { 		//Loook thorugh SSkill array for an ESkill	
+        if (skills[i].skillType == skillType) { 		//Loook thorugh SSkill array for an ESkill	
             return i;									//Return index of skill if found
         }
     }
@@ -70,7 +32,7 @@ function CSUMenuBool(group: name, key: name): bool {
 }
 
 function CSUMenuSet(groupName : name, varName : name, varValue : string) {
-    return theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
+    theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
 }
 
 function CSUGetConfirmBuy() : bool {
