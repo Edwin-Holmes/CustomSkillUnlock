@@ -1,4 +1,11 @@
-@addMethod(W3PlayerAbilityManager) private function GetSkillTierCosts(out playerSkills: array<ESkill>, out tierCosts: array<int>) {
+struct CSUSkillCost {
+    var skill: ESkill;
+    var cost: int;
+}
+
+@addMethod(W3PlayerAbilityManager) private function GetSkillTierCosts(): array<CSUSkillCost> {
+    var masterList: array<CSUSkillCost>;
+    var skills: array<ESkill>;
 	//Get values from menu
 	var swordTier1		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier1', 6);
 	var swordTier2		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier2', 12);
@@ -11,135 +18,177 @@
 	var alchemyTier3	: int = CSUMenuInt('SkillUnlockCost', 'AlchemyTier3', 18);
 	
 	//Ensure logical progression
-	if (swordTier2 < swordTier1)	 {swordTier2 = swordTier1;}
-	if (swordTier3 < swordTier2)	 {swordTier3 = swordTier2;}
-	if (magicTier2 < magicTier1)	 {magicTier2 = magicTier1;}
-	if (magicTier3 < magicTier2)	 {magicTier3 = magicTier2;}
-	if (alchemyTier2 < alchemyTier1) {alchemyTier2 = alchemyTier1;}
-	if (alchemyTier3 < alchemyTier2) {alchemyTier3 = alchemyTier2;}
+	if (swordTier2 < swordTier1) {
+		swordTier2 = swordTier1;
+		CSUMenuSet('SkillUnlockCost', 'SwordTier2', IntToString(swordTier2));
+		}
+	if (swordTier3 < swordTier2) {
+		swordTier3 = swordTier2;
+		CSUMenuSet('SkillUnlockCost', 'SwordTier3', IntToString(swordTier3));
+		}
+	if (magicTier2 < magicTier1) {
+		magicTier2 = magicTier1;
+		CSUMenuSet('SkillUnlockCost', 'MagicTier2', IntToString(magicTier2));
+		}
+	if (magicTier3 < magicTier2) {
+		magicTier3 = magicTier2;
+		CSUMenuSet('SkillUnlockCost', 'MagicTier3', IntToString(magicTier3));
+		}
+	if (alchemyTier2 < alchemyTier1) {
+		alchemyTier2 = alchemyTier1;
+		CSUMenuSet('SkillUnlockCost', 'AlchemyTier2', IntToString(alchemyTier2));
+		}
+	if (alchemyTier3 < alchemyTier2) {
+		alchemyTier3 = alchemyTier2;
+		CSUMenuSet('SkillUnlockCost', 'AlchemyTier3', IntToString(alchemyTier3));
+		}
 	
-	// Sword Tier
-	playerSkills.PushBack(S_Sword_s08);   tierCosts.PushBack(swordTier1);
-	playerSkills.PushBack(S_Sword_s09);   tierCosts.PushBack(swordTier1);
-	playerSkills.PushBack(S_Sword_s15);   tierCosts.PushBack(swordTier1);
-	playerSkills.PushBack(S_Sword_s17);   tierCosts.PushBack(swordTier1);
-	playerSkills.PushBack(S_Sword_s18);   tierCosts.PushBack(swordTier1);
+	// Sword Tiers
+    skills.Clear();
+    skills.PushBack(S_Sword_s08); skills.PushBack(S_Sword_s09); skills.PushBack(S_Sword_s15); 
+    skills.PushBack(S_Sword_s17); skills.PushBack(S_Sword_s18);
+    AddTierToCostList(masterList, skills, swordTier1);
 
-	playerSkills.PushBack(S_Sword_s01);   tierCosts.PushBack(swordTier2);
-	playerSkills.PushBack(S_Sword_s02);   tierCosts.PushBack(swordTier2);
-	playerSkills.PushBack(S_Sword_s07);   tierCosts.PushBack(swordTier2);
-	playerSkills.PushBack(S_Sword_s11);   tierCosts.PushBack(swordTier2);
-	playerSkills.PushBack(S_Sword_s20);   tierCosts.PushBack(swordTier2);
+    skills.Clear();
+    skills.PushBack(S_Sword_s01); skills.PushBack(S_Sword_s02); skills.PushBack(S_Sword_s07);
+    skills.PushBack(S_Sword_s11); skills.PushBack(S_Sword_s20);
+    AddTierToCostList(masterList, skills, swordTier2);
 
-	playerSkills.PushBack(S_Sword_s03);   tierCosts.PushBack(swordTier3);
-	playerSkills.PushBack(S_Sword_s05);   tierCosts.PushBack(swordTier3);
-	playerSkills.PushBack(S_Sword_s06);   tierCosts.PushBack(swordTier3);
-	playerSkills.PushBack(S_Sword_s12);   tierCosts.PushBack(swordTier3);
-	playerSkills.PushBack(S_Sword_s19);   tierCosts.PushBack(swordTier3);
-	
-	// Magic Tier
-	playerSkills.PushBack(S_Magic_s01);   tierCosts.PushBack(magicTier1);
-	playerSkills.PushBack(S_Magic_s02);   tierCosts.PushBack(magicTier1);
-	playerSkills.PushBack(S_Magic_s03);   tierCosts.PushBack(magicTier1);
-	playerSkills.PushBack(S_Magic_s04);   tierCosts.PushBack(magicTier1);
-	playerSkills.PushBack(S_Magic_s05);   tierCosts.PushBack(magicTier1);
+	skills.Clear();
+    skills.PushBack(S_Sword_s03); skills.PushBack(S_Sword_s05); skills.PushBack(S_Sword_s06);
+    skills.PushBack(S_Sword_s12); skills.PushBack(S_Sword_s19);
+    AddTierToCostList(masterList, skills, swordTier3);
 
-	playerSkills.PushBack(S_Magic_s07);   tierCosts.PushBack(magicTier2);
-	playerSkills.PushBack(S_Magic_s12);   tierCosts.PushBack(magicTier2);
-	playerSkills.PushBack(S_Magic_s15);   tierCosts.PushBack(magicTier2);
-	playerSkills.PushBack(S_Magic_s16);   tierCosts.PushBack(magicTier2);
-	playerSkills.PushBack(S_Magic_s18);   tierCosts.PushBack(magicTier2);
+    // Magic Tiers
+    skills.Clear();
+    skills.PushBack(S_Magic_s01); skills.PushBack(S_Magic_s02); skills.PushBack(S_Magic_s03);
+    skills.PushBack(S_Magic_s04); skills.PushBack(S_Magic_s05);
+    AddTierToCostList(masterList, skills, magicTier1);
 
-	playerSkills.PushBack(S_Magic_s06);   tierCosts.PushBack(magicTier3);
-	playerSkills.PushBack(S_Magic_s09);   tierCosts.PushBack(magicTier3);
-	playerSkills.PushBack(S_Magic_s11);   tierCosts.PushBack(magicTier3);
-	playerSkills.PushBack(S_Magic_s14);   tierCosts.PushBack(magicTier3);
-	playerSkills.PushBack(S_Magic_s19);   tierCosts.PushBack(magicTier3);
-	
-	// Alchemy Tier 
-	playerSkills.PushBack(S_Alchemy_s02);   tierCosts.PushBack(alchemyTier1);
-	playerSkills.PushBack(S_Alchemy_s05);   tierCosts.PushBack(alchemyTier1);
-	playerSkills.PushBack(S_Alchemy_s10);   tierCosts.PushBack(alchemyTier1);
-	playerSkills.PushBack(S_Alchemy_s13);   tierCosts.PushBack(alchemyTier1);
-	playerSkills.PushBack(S_Alchemy_s20);   tierCosts.PushBack(alchemyTier1);
+	skills.Clear();
+    skills.PushBack(S_Magic_s07); skills.PushBack(S_Magic_s12); skills.PushBack(S_Magic_s15);
+    skills.PushBack(S_Magic_s16); skills.PushBack(S_Magic_s18);
+    AddTierToCostList(masterList, skills, magicTier2);
 
-	playerSkills.PushBack(S_Alchemy_s03);   tierCosts.PushBack(alchemyTier2);
-	playerSkills.PushBack(S_Alchemy_s06);   tierCosts.PushBack(alchemyTier2);
-	playerSkills.PushBack(S_Alchemy_s08);   tierCosts.PushBack(alchemyTier2);
-	playerSkills.PushBack(S_Alchemy_s15);   tierCosts.PushBack(alchemyTier2);
-	playerSkills.PushBack(S_Alchemy_s19);   tierCosts.PushBack(alchemyTier2);
-	
-	playerSkills.PushBack(S_Alchemy_s04);   tierCosts.PushBack(alchemyTier3);
-	playerSkills.PushBack(S_Alchemy_s07);   tierCosts.PushBack(alchemyTier3);
-	playerSkills.PushBack(S_Alchemy_s11);   tierCosts.PushBack(alchemyTier3);
-	playerSkills.PushBack(S_Alchemy_s14);   tierCosts.PushBack(alchemyTier3);
-	playerSkills.PushBack(S_Alchemy_s17);   tierCosts.PushBack(alchemyTier3);
+	skills.Clear();
+    skills.PushBack(S_Magic_s06); skills.PushBack(S_Magic_s09); skills.PushBack(S_Magic_s11);
+    skills.PushBack(S_Magic_s14); skills.PushBack(S_Magic_s19);
+    AddTierToCostList(masterList, skills, magicTier3);
+
+	// Alchemy Tiers
+    skills.Clear();
+    skills.PushBack(S_Alchemy_s02); skills.PushBack(S_Alchemy_s05); skills.PushBack(S_Alchemy_s10);
+    skills.PushBack(S_Alchemy_s13); skills.PushBack(S_Alchemy_s20);
+    AddTierToCostList(masterList, skills, alchemyTier1);
+
+	skills.Clear();
+    skills.PushBack(S_Alchemy_s03); skills.PushBack(S_Alchemy_s06); skills.PushBack(S_Alchemy_s08);
+    skills.PushBack(S_Alchemy_s15); skills.PushBack(S_Alchemy_s19);
+    AddTierToCostList(masterList, skills, alchemyTier2);
+
+	skills.Clear();
+    skills.PushBack(S_Alchemy_s04); skills.PushBack(S_Alchemy_s07); skills.PushBack(S_Alchemy_s11);
+    skills.PushBack(S_Alchemy_s14); skills.PushBack(S_Alchemy_s17);
+    AddTierToCostList(masterList, skills, alchemyTier3);
+
+	return masterList;
+}
+
+@addMethod(W3PlayerAbilityManager) private function AddTierToCostList(out masterList : array<CSUSkillCost>, skillsToTier : array<ESkill>, cost : int) {
+    var i: int;
+    var pair: CSUSkillCost;
+
+    pair.cost = cost; 													//Set this tier's cost	
+    for (i = 0; i < skillsToTier.Size(); i += 1) {
+        pair.skill = skillsToTier[i];									//Set skills included in this teir	
+        masterList.PushBack(pair);										//Add tier to master list
+    }
 }
 
 @addMethod(W3PlayerAbilityManager) public function SetSkillUnlockCosts() {
-	var playerSkills	: array<ESkill>;
-	var tierCosts		: array<int>;  
-	var costIndex		: int; 
-	var skill			: ESkill;
-    var i, j			: int;
-	
-	GetSkillTierCosts(playerSkills, tierCosts);
+    var skillCosts: array<CSUSkillCost>;
+    var i, j: int;
+    
+    skillCosts = GetSkillTierCosts();
 
-	for( i = 0; i < skills.Size(); i += 1 ) {
-        skill = skills[i].skillType;
-        costIndex = -1;
-        for (j = 0; j < playerSkills.Size(); j += 1) {
-            if (playerSkills[j] == skill) {
-                costIndex = j;
-                break;
+    for( i = 0; i < skills.Size(); i += 1 ) {  							//Look thorugh skills list
+        for (j = 0; j < skillCosts.Size(); j += 1) {					//Look thorugh costs list
+            if (skillCosts[j].skill == skills[i].skillType) {			//Find matching skill
+                skills[i].requiredPointsSpent = skillCosts[j].cost;		//Apply cost
+                break; 													//Stop j and back out to i
             }
         }
-
-        if (costIndex != -1) {
-            skills[i].requiredPointsSpent = tierCosts[costIndex];
-        }
     }
-
 }
 
 @addMethod(W3PlayerAbilityManager) private function GetSlotUnlocks(out unlockLevel : array<int>) {
-	//Get values from menu
-	var slot1	: int = CSUMenuInt('SlotUnlock', 'Slot1Lvl', 0);
-	var slot2	: int = CSUMenuInt('SlotUnlock', 'Slot2Lvl', 2);
-	var slot3	: int = CSUMenuInt('SlotUnlock', 'Slot3Lvl', 4);
-	var slot4	: int = CSUMenuInt('SlotUnlock', 'Slot4Lvl', 6);
-	var slot5	: int = CSUMenuInt('SlotUnlock', 'Slot5Lvl', 8);
-	var slot6	: int = CSUMenuInt('SlotUnlock', 'Slot6Lvl', 10);
-	var slot7	: int = CSUMenuInt('SlotUnlock', 'Slot7Lvl', 12);
-	var slot8	: int = CSUMenuInt('SlotUnlock', 'Slot8Lvl', 15);
-	var slot9	: int = CSUMenuInt('SlotUnlock', 'Slot9Lvl', 18);
-	var slot10	: int = CSUMenuInt('SlotUnlock', 'Slot10Lvl', 22);
-	var slot11	: int = CSUMenuInt('SlotUnlock', 'Slot11Lvl', 26);
-	var slot12	: int = CSUMenuInt('SlotUnlock', 'Slot12Lvl', 30);
-	var i		: int;
+	var i: int;
+	var slotName: name;
 
 	//Populate array
     unlockLevel.Clear();
 
-    unlockLevel.PushBack(slot1);
-	unlockLevel.PushBack(slot2);
-	unlockLevel.PushBack(slot3);
-	unlockLevel.PushBack(slot4);
-	unlockLevel.PushBack(slot5);
-	unlockLevel.PushBack(slot6);
-	unlockLevel.PushBack(slot7);
-	unlockLevel.PushBack(slot8);
-	unlockLevel.PushBack(slot9);
-	unlockLevel.PushBack(slot10);
-	unlockLevel.PushBack(slot11);
-	unlockLevel.PushBack(slot12);
+    unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot1Lvl', 0));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot2Lvl', 2));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot3Lvl', 4));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot4Lvl', 6));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot5Lvl', 8));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot6Lvl', 10));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot7Lvl', 12));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot8Lvl', 15));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot9Lvl', 18));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot10Lvl', 22));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot11Lvl', 26));
+	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot12Lvl', 30));
 
 	//Ensure logical progression
-	for (i = 1; i < unlockLevel.Size(); i += 1)
-	{
-	    if (unlockLevel[i] < unlockLevel[i-1])
-	    {
+	for (i = 1; i < unlockLevel.Size(); i += 1) {
+	    if (unlockLevel[i] < unlockLevel[i-1]) {
 	        unlockLevel[i] = unlockLevel[i-1];
+
+			switch(i) {
+            case 1:  slotName = 'Slot2Lvl';  break;
+            case 2:  slotName = 'Slot3Lvl';  break;
+            case 3:  slotName = 'Slot4Lvl';  break;
+            case 4:  slotName = 'Slot5Lvl';  break;
+            case 5:  slotName = 'Slot6Lvl';  break;
+            case 6:  slotName = 'Slot7Lvl';  break;
+            case 7:  slotName = 'Slot8Lvl';  break;
+            case 8:  slotName = 'Slot9Lvl';  break;
+            case 9:  slotName = 'Slot10Lvl'; break;
+            case 10: slotName = 'Slot11Lvl'; break;
+            case 11: slotName = 'Slot12Lvl'; break;
+        	}
+
+            CSUMenuSet('SlotUnlock', slotName, IntToString(unlockLevel[i]));
+	    }
+	}
+}
+
+@addMethod(W3PlayerAbilityManager) private function GetMutagenUnlocks(out mutagenUnlockLevel : array<int>) {
+	var i: int;
+	var mutagenName: name;
+	
+	//Populate array
+	mutagenUnlockLevel.Clear();
+
+    mutagenUnlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Mutagen1Lvl', 2)); 
+    mutagenUnlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Mutagen2Lvl', 9)); 
+    mutagenUnlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Mutagen3Lvl', 16)); 
+    mutagenUnlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Mutagen4Lvl', 28)); 
+
+	//Ensure logical progression
+	for (i = 1; i < mutagenUnlockLevel.Size(); i += 1) {
+	    if (mutagenUnlockLevel[i] < mutagenUnlockLevel[i-1]) {
+	        mutagenUnlockLevel[i] = mutagenUnlockLevel[i-1];
+
+			switch(i) {
+                case 1: mutagenName = 'Mutagen2Lvl'; break;
+                case 2: mutagenName = 'Mutagen3Lvl'; break;
+                case 3: mutagenName = 'Mutagen4Lvl'; break;
+            }
+
+            CSUMenuSet('SlotUnlock', mutagenName, IntToString(mutagenUnlockLevel[i]));
 	    }
 	}
 }
@@ -164,54 +213,37 @@
 	}
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetMutagenUnlocks(out mutagenUnlockLevel : array<int>) {
-	//Fetch variables from menu
-	var mutagen1: int = CSUMenuInt('SlotUnlock', 'Mutagen1Lvl', 2);
-	var mutagen2: int = CSUMenuInt('SlotUnlock', 'Mutagen2Lvl', 9);
-	var mutagen3: int = CSUMenuInt('SlotUnlock', 'Mutagen3Lvl', 16);
-	var mutagen4: int = CSUMenuInt('SlotUnlock', 'Mutagen4Lvl', 28);
-	var i		: int;
-	
-	//Populate array
-	mutagenUnlockLevel.Clear();
-
-    mutagenUnlockLevel.PushBack(mutagen1); 
-    mutagenUnlockLevel.PushBack(mutagen2); 
-    mutagenUnlockLevel.PushBack(mutagen3); 
-    mutagenUnlockLevel.PushBack(mutagen4); 
-
-	//Ensure logical progression
-	for (i = 1; i < mutagenUnlockLevel.Size(); i += 1)
-	{
-	    if (mutagenUnlockLevel[i] < mutagenUnlockLevel[i-1])
-	    {
-	        mutagenUnlockLevel[i] = mutagenUnlockLevel[i-1];
-	    }
-	}
-}
-
 @addMethod(W3PlayerAbilityManager) private function GetCustomMutationsForUnlock(stage : int): int {
-	//Get variables from menu
-	var costSlot1: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot1', 2);
-	var costSlot2: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot2', 4);
-	var costSlot3: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot3', 8);
-	var costSlot4: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot4', 12);
+    //Get values from menu
+    var costSlot1: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot1', 2);
+    var costSlot2: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot2', 4);
+    var costSlot3: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot3', 8);
+    var costSlot4: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot4', 12);
 
-	//Ensure logical progression
-	if (costSlot2 < costSlot1) {costSlot2 = costSlot1;}
-	if (costSlot3 < costSlot2) {costSlot3 = costSlot2;}
-	if (costSlot4 < costSlot3) {costSlot4 = costSlot3;}
+    //Ensure logical progression
+    if (costSlot2 < costSlot1) {
+        costSlot2 = costSlot1;
+        CSUMenuSet('SlotUnlock', 'MutationCostSlot2', IntToString(costSlot2));
+    }
+    if (costSlot3 < costSlot2) {
+        costSlot3 = costSlot2;
+        CSUMenuSet('SlotUnlock', 'MutationCostSlot3', IntToString(costSlot3));
+    }
+    if (costSlot4 < costSlot3) {
+        costSlot4 = costSlot3;
+        CSUMenuSet('SlotUnlock', 'MutationCostSlot4', IntToString(costSlot4));
+    }
 
-	//Replicate vanilla logic substituting custom values
-	if 		(stage == 1) return costSlot1;
-	else if (stage == 2) return costSlot2;
-	else if (stage == 3) return costSlot3;
-	else if (stage == 4) return costSlot4;
-	else
-	{
-	    LogChannel('MutationUnlockCost', "Invalid stage value: " + stage);
-	    return costSlot1;
-	}
+    //Mirror vanilla logic using modified values
+    switch(stage) {
+        case 1:  return costSlot1;
+        case 2:  return costSlot2;
+        case 3:  return costSlot3;
+        case 4:  return costSlot4;
+        default:
+            LogChannel('MutationUnlockCost', "Invalid stage value: " + stage);
+            return costSlot1;
+    }
 }
 
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
@@ -234,6 +266,7 @@
 	return retVal;
 }
 
+//Overide vanilla values with the custom ones
 @wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
     var res : bool;
     res = wrappedMethod(ownr, cStats, isFromLoad, diff);
@@ -291,27 +324,6 @@
         return allColors;
     }
     return wrappedMethod(mutationType);
-}
-
-
-@wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
-	var csu_skill: SSkill;
-	csu_skill = thePlayer.GetPlayerSkill(skillID);
-	
-	if (thePlayer.IsInCombat()) {
-		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
-		OnPlaySoundEvent("gui_global_denied");
-		return false;
-	}
-	else {
-		if(!CSUGetConfirmBuy()) {
-			handleBuySkillConfirmation(skillID);
-			return true;
-		}
-		else {
-			return wrappedMethod(skillID);
-		}
-	}
 }
 
 @wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills() : void {
@@ -393,3 +405,62 @@
 	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
 }
 
+//Toggle skill purchaseconfirmation popup
+@wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
+	var csu_skill: SSkill;
+	csu_skill = thePlayer.GetPlayerSkill(skillID);
+	
+	if (thePlayer.IsInCombat()) {
+		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
+		OnPlaySoundEvent("gui_global_denied");
+		return false;
+	}
+	else {
+		if(!CSUGetConfirmBuy()) {
+			handleBuySkillConfirmation(skillID);
+			return true;
+		}
+		else {
+			return wrappedMethod(skillID);
+		}
+	}
+}
+
+//Clear perchases and activations; refresh character panel
+@addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
+		// Vanilla cleardevelop without the inventory logic
+		var i : int;
+		var abs : array<name>;
+		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
+	
+		delete abilityManager;
+		delete levelManager;
+		delete effectManager;
+		
+		
+		GetCharacterStats().GetAbilities(abs, false);
+		for(i=0; i<abs.Size(); i+=1)
+			RemoveAbility(abs[i]);
+			
+		
+		abs.Clear();
+		GetCharacterStatsParam(abs);		
+		for(i=0; i<abs.Size(); i+=1)
+			AddAbility(abs[i]);
+					
+		
+		levelManager = new W3LevelManager in this;			
+		levelManager.Initialize();
+		levelManager.PostInit(this, false, true);		
+						
+		
+		AddAbility('GeraltSkills_Testing');
+		SetAbilityManager();		
+		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
+		
+		SetEffectManager();
+		
+		abilityManager.PostInit();
+
+		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
+}
