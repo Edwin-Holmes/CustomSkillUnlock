@@ -8,10 +8,10 @@ function CSUCheckMenuResetToggle() {
     }
 }
 
-function CSUFindSkillIndex(skillType: ESkill, skills: array<SSkill>): int {
+function CSUFindSkillIndex(target: ESkill, skillList: array<SSkill>): int {
     var i: int;
-    for (i = 0; i < skills.Size(); i += 1) {
-        if (skills[i].skillType == skillType) { 		//Loook thorugh SSkill array for an ESkill	
+    for (i = 0; i < skillList.Size(); i += 1) {
+        if (skillList[i].skillType == target) { 		//Loook thorugh SSkill array for an ESkill	
             return i;									//Return index of skill if found
         }
     }
