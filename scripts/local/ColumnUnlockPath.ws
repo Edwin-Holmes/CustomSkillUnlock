@@ -1,10 +1,10 @@
 struct ColumnUnlockPair {
     var parentSkill: ESkill;
     var childSkill: ESkill;
-};
+}
 
 // Initialize and return skill dependencies
-@addMethod(W3PlayerAbilityManager) private function GetColumnUnlockPairs() : array<ColumnUnlockPair> {
+@addMethod(W3PlayerAbilityManager) private function GetColumnUnlockPairs(): array<ColumnUnlockPair> {
     var columnPairs: array<ColumnUnlockPair>;
     var columnUnlock: ColumnUnlockPair;
     
@@ -77,7 +77,7 @@ struct ColumnUnlockPair {
     return columnPairs;
 }
 
-@addMethod(W3PlayerAbilityManager) public function IsColumnRequirementMet(skill : ESkill) : bool {
+@addMethod(W3PlayerAbilityManager) public function IsColumnRequirementMet(skill: ESkill): bool {
     var pairs: array<ColumnUnlockPair>;
     var skills: array<SSkill>;
     var i: int;
