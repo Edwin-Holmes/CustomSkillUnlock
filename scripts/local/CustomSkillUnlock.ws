@@ -330,7 +330,7 @@ struct CSUSkillCost {
     return wrappedMethod(mutationType);		//Locked to mutation colour
 }
 
-//Effectively replaceMethod
+//Effectively replaceMethod :(
 @wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void {
 	var csu_i, csu_slotsCount : int;
 	var csu_curSlot      : SSkillSlot;
@@ -394,6 +394,7 @@ struct CSUSkillCost {
 				{
 					csu_colorBorderId += "Blue";
 				}
+				
 				if( csu_colorsList.Contains(SC_Yellow) )	//Yellow border for general skills
 				{
 					csu_colorBorderId += "Yellow";
