@@ -287,11 +287,11 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill); 		//Is parent skill max?	
+    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
     var rowMet : bool = false;
     
     if (CSUShouldRowsUnlock()) {
-        rowMet = wrappedMethod(skill);								//Would vanilla unlock the skill?
+        rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
     return columnMet || rowMet;
@@ -394,7 +394,7 @@ struct CSUSkillCost {
 				{
 					csu_colorBorderId += "Blue";
 				}
-				
+
 				if( csu_colorsList.Contains(SC_Yellow) )	//Yellow border for general skills
 				{
 					csu_colorBorderId += "Yellow";
