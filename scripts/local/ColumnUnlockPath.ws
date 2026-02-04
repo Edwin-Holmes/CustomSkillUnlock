@@ -10,21 +10,21 @@ struct ColumnUnlockPair {
     
     // Sword Branch
         // Fast column
-    columnUnlock.parentSkill = S_Sword_s21; columnUnlock.childSkill = S_Sword_s17; columnPairs.PushBack(columnUnlock); 
-    columnUnlock.parentSkill = S_Sword_s17; columnUnlock.childSkill = S_Sword_s01; columnPairs.PushBack(columnUnlock);
-    columnUnlock.parentSkill = S_Sword_s01; columnUnlock.childSkill = S_Sword_s05; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s21; columnUnlock.childSkill = S_Sword_s01; columnPairs.PushBack(columnUnlock); 
+    columnUnlock.parentSkill = S_Sword_s01; columnUnlock.childSkill = S_Sword_s17; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s17; columnUnlock.childSkill = S_Sword_s05; columnPairs.PushBack(columnUnlock);
         // Strong column
-    columnUnlock.parentSkill = S_Sword_s04; columnUnlock.childSkill = S_Sword_s08; columnPairs.PushBack(columnUnlock); 
-    columnUnlock.parentSkill = S_Sword_s08; columnUnlock.childSkill = S_Sword_s02; columnPairs.PushBack(columnUnlock);
-    columnUnlock.parentSkill = S_Sword_s02; columnUnlock.childSkill = S_Sword_s06; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s04; columnUnlock.childSkill = S_Sword_s02; columnPairs.PushBack(columnUnlock); 
+    columnUnlock.parentSkill = S_Sword_s02; columnUnlock.childSkill = S_Sword_s08; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s08; columnUnlock.childSkill = S_Sword_s06; columnPairs.PushBack(columnUnlock);
         // Defense column
     columnUnlock.parentSkill = S_Sword_s10; columnUnlock.childSkill = S_Sword_s09; columnPairs.PushBack(columnUnlock); 
     columnUnlock.parentSkill = S_Sword_s09; columnUnlock.childSkill = S_Sword_s11; columnPairs.PushBack(columnUnlock);
     columnUnlock.parentSkill = S_Sword_s11; columnUnlock.childSkill = S_Sword_s03; columnPairs.PushBack(columnUnlock);
         // Marksmanship column
-    columnUnlock.parentSkill = S_Sword_s13; columnUnlock.childSkill = S_Sword_s15; columnPairs.PushBack(columnUnlock); 
-    columnUnlock.parentSkill = S_Sword_s15; columnUnlock.childSkill = S_Sword_s07; columnPairs.PushBack(columnUnlock);
-    columnUnlock.parentSkill = S_Sword_s07; columnUnlock.childSkill = S_Sword_s12; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s13; columnUnlock.childSkill = S_Sword_s07; columnPairs.PushBack(columnUnlock); 
+    columnUnlock.parentSkill = S_Sword_s07; columnUnlock.childSkill = S_Sword_s15; columnPairs.PushBack(columnUnlock);
+    columnUnlock.parentSkill = S_Sword_s15; columnUnlock.childSkill = S_Sword_s12; columnPairs.PushBack(columnUnlock);
         // Battle Trance column
     columnUnlock.parentSkill = S_Sword_s16; columnUnlock.childSkill = S_Sword_s18; columnPairs.PushBack(columnUnlock); 
     columnUnlock.parentSkill = S_Sword_s18; columnUnlock.childSkill = S_Sword_s20; columnPairs.PushBack(columnUnlock);
