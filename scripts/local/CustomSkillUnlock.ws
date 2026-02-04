@@ -18,28 +18,28 @@ struct CSUSkillCost {
 	var alchemyTier3	: int = CSUMenuInt('SkillUnlockCost', 'AlchemyTier3', 18);
 	
 	//Ensure logical progression
-	if (swordTier2 < swordTier1) {
-		swordTier2 = swordTier1;
+	if (swordTier2 <= swordTier1) {
+		swordTier2 = swordTier1 + 1;
 		CSUMenuSet('SkillUnlockCost', 'SwordTier2', IntToString(swordTier2));
 		}
-	if (swordTier3 < swordTier2) {
-		swordTier3 = swordTier2;
+	if (swordTier3 <= swordTier2) {
+		swordTier3 = swordTier2 + 1;
 		CSUMenuSet('SkillUnlockCost', 'SwordTier3', IntToString(swordTier3));
 		}
-	if (magicTier2 < magicTier1) {
-		magicTier2 = magicTier1;
+	if (magicTier2 <= magicTier1) {
+		magicTier2 = magicTier1 + 1;
 		CSUMenuSet('SkillUnlockCost', 'MagicTier2', IntToString(magicTier2));
 		}
-	if (magicTier3 < magicTier2) {
-		magicTier3 = magicTier2;
+	if (magicTier3 <= magicTier2) {
+		magicTier3 = magicTier2 + 1;
 		CSUMenuSet('SkillUnlockCost', 'MagicTier3', IntToString(magicTier3));
 		}
-	if (alchemyTier2 < alchemyTier1) {
-		alchemyTier2 = alchemyTier1;
+	if (alchemyTier2 <= alchemyTier1) {
+		alchemyTier2 = alchemyTier1 + 1;
 		CSUMenuSet('SkillUnlockCost', 'AlchemyTier2', IntToString(alchemyTier2));
 		}
-	if (alchemyTier3 < alchemyTier2) {
-		alchemyTier3 = alchemyTier2;
+	if (alchemyTier3 <= alchemyTier2) {
+		alchemyTier3 = alchemyTier2 + 1;
 		CSUMenuSet('SkillUnlockCost', 'AlchemyTier3', IntToString(alchemyTier3));
 		}
 	
