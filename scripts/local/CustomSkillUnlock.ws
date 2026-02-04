@@ -436,7 +436,7 @@ struct CSUSkillCost {
 
 //Clear perchases and activations; refresh character panel
 @addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
-		// Vanilla cleardevelop without the inventory logic
+		//Vanilla cleardevelop without the inventory logic + collect & restore xp
 		var i : int;
 		var abs : array<name>;
 		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
