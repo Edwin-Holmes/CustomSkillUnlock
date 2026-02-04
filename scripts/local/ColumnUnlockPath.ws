@@ -94,10 +94,10 @@ struct ColumnUnlockPair {
         if (pairs[i].childSkill == skill) {                                 //Is the skill in the array as a child?
             parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);  //Find its parent skill
             if (parentIndex != -1 && skills[parentIndex].level == skills[parentIndex].maxLevel) {
-                return true;                                                //Parent skill maxed; unlock
+                return true;                                                //Parent skill max; unlock
             }
 
-            return false;                                                   //Parent skill not maxed; stay locked    
+            return false;                                                   //Parent skill not max; stay locked    
         }
     }
     

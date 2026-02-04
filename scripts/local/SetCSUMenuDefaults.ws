@@ -27,7 +27,7 @@ function CSU_Initialize() {
         CSUMenuSet('SkillUnlockCost', 'AlchemyTier2', 12);
         CSUMenuSet('SkillUnlockCost', 'AlchemyTier3', 18);
     // Slot Unlock Level Init
-        CSUMenuSet('SlotUnlock', 'Slot1Lvl', 0);
+        CSUMenuSet('SlotUnlock', 'Slot1Lvl', 1);
         CSUMenuSet('SlotUnlock', 'Slot2Lvl', 2);
         CSUMenuSet('SlotUnlock', 'Slot3Lvl', 4);
         CSUMenuSet('SlotUnlock', 'Slot4Lvl', 6);

@@ -6,8 +6,7 @@ struct CSUSkillCost {
 @addMethod(W3PlayerAbilityManager) private function GetSkillTierCosts(): array<CSUSkillCost> {
     var masterList: array<CSUSkillCost>;
     var skills: array<ESkill>;
-	//Get values from menu
-	var swordTier1		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier1', 6);
+	var swordTier1		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier1', 6);	
 	var swordTier2		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier2', 12);
 	var swordTier3		: int = CSUMenuInt('SkillUnlockCost', 'SwordTier3', 18);
 	var magicTier1		: int = CSUMenuInt('SkillUnlockCost', 'MagicTier1', 6);
@@ -17,7 +16,7 @@ struct CSUSkillCost {
 	var alchemyTier2	: int = CSUMenuInt('SkillUnlockCost', 'AlchemyTier2', 12);
 	var alchemyTier3	: int = CSUMenuInt('SkillUnlockCost', 'AlchemyTier3', 18);
 	
-	//Ensure logical progression
+	//Ensure logical progression & force +1 step (avoids skill grid reshuffle)
 	if (swordTier2 <= swordTier1) {
 		swordTier2 = swordTier1 + 1;
 		CSUMenuSet('SkillUnlockCost', 'SwordTier2', IntToString(swordTier2));
@@ -94,13 +93,13 @@ struct CSUSkillCost {
 	return masterList;
 }
 
-@addMethod(W3PlayerAbilityManager) private function AddTierToCostList(out masterList : array<CSUSkillCost>, skillsToTier : array<ESkill>, cost : int) {
+@addMethod(W3PlayerAbilityManager) private function AddTierToCostList(out masterList: array<CSUSkillCost>, skillsToTier: array<ESkill>, cost: int) {
     var i: int;
     var pair: CSUSkillCost;
 
     pair.cost = cost; 													//Set this tier's cost	
     for (i = 0; i < skillsToTier.Size(); i += 1) {
-        pair.skill = skillsToTier[i];									//Set skills included in this teir	
+        pair.skill = skillsToTier[i];									//Get skills included in this tier	
         masterList.PushBack(pair);										//Add tier to master list
     }
 }
@@ -111,7 +110,7 @@ struct CSUSkillCost {
     
     skillCosts = GetSkillTierCosts();
 
-    for( i = 0; i < skills.Size(); i += 1 ) {  							//Look thorugh skills list
+    for( i = 0; i < skills.Size(); i += 1 ) {  							//Look thorugh Geralt skills list
         for (j = 0; j < skillCosts.Size(); j += 1) {					//Look thorugh costs list
             if (skillCosts[j].skill == skills[i].skillType) {			//Find matching skill
                 skills[i].requiredPointsSpent = skillCosts[j].cost;		//Apply cost
@@ -198,23 +197,22 @@ struct CSUSkillCost {
 	var mutagenUnlockLevel : array<int>;
 	var i : int;
 
-	this.GetSlotUnlocks(unlockLevel);
+	this.GetSlotUnlocks(unlockLevel);									//Get user unlock levels	
 	for (i = 0; i < skillSlots.Size(); i += 1) {
 		if (i < unlockLevel.Size()) {
-			skillSlots[i].unlockedOnLevel = unlockLevel[i];
+			skillSlots[i].unlockedOnLevel = unlockLevel[i];				//Replace vanilla unlock
 		}
 	}
 
-	this.GetMutagenUnlocks(mutagenUnlockLevel);
+	this.GetMutagenUnlocks(mutagenUnlockLevel); 						//Get user unlock levels
 	for (i = 0; i < mutagenSlots.Size(); i += 1) {
 		if (i < mutagenUnlockLevel.Size()) {
-			mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];
+			mutagenSlots[i].unlockedAtLevel = mutagenUnlockLevel[i];	//Replace vanilla unlock
 		}
 	}
 }
 
 @addMethod(W3PlayerAbilityManager) private function GetCustomMutationsForUnlock(stage : int): int {
-    //Get values from menu
     var costSlot1: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot1', 2);
     var costSlot2: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot2', 4);
     var costSlot3: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot3', 8);
@@ -251,12 +249,12 @@ struct CSUSkillCost {
 	var retVal: bool;
 
 	retVal = wrappedMethod();											//Store vanilla bool return value
-	CSUCheckMenuResetToggle();											//Check reset skills/slots toggle
+	CSUCheckMenuResetToggle();											//Check reset progression toggle
 	
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
 	if (am) {
-		am.SetSkillUnlockCosts();										//Update skill/slot costs
-		am.UpdateSlotUnlocks();											//Update skill/slot unlock levels
+		am.SetSkillUnlockCosts();										//Update skill costs
+		am.UpdateSlotUnlocks();											//Update slot unlock levels
 	}
 
 	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
@@ -267,32 +265,33 @@ struct CSUSkillCost {
 }
 
 //Overide vanilla values with the custom ones
-@wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode) : bool {
-    var res : bool;
-    res = wrappedMethod(ownr, cStats, isFromLoad, diff);
-    if (res && ownr == thePlayer) {
+@wrapMethod(W3PlayerAbilityManager) function Init(ownr : CActor, cStats : CCharacterStats, isFromLoad : bool, diff : EDifficultyMode): bool {
+    var retVal : bool;
+    retVal = wrappedMethod(ownr, cStats, isFromLoad, diff);
+
+    if (retVal && ownr == thePlayer) {
         this.SetSkillUnlockCosts();
     }
-    return res;
+    return retVal;
 }
 
-@wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill) : bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill);
+@wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill): bool {
+    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
     var rowMet : bool = false;
     
     if (CSUShouldRowsUnlock()) {
-        rowMet = wrappedMethod(skill);
+        rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
     return columnMet || rowMet;
 }
 
-@wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill) : bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill);
+@wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
+    var columnMet : bool = this.IsColumnRequirementMet(skill); 		//Is parent skill max?	
     var rowMet : bool = false;
     
     if (CSUShouldRowsUnlock()) {
-        rowMet = wrappedMethod(skill);
+        rowMet = wrappedMethod(skill);								//Would vanilla unlock the skill?
     }
     
     return columnMet || rowMet;
@@ -308,25 +307,31 @@ struct CSUSkillCost {
     this.UpdateSlotUnlocks();
 }
 
-@wrapMethod(W3PlayerAbilityManager) function GetMutationsRequiredForMasterStage( stage : int ) : int {
-    var customMutationsReq : int = this.GetCustomMutationsForUnlock(stage);
-    if (customMutationsReq >= 0) return customMutationsReq;
+@wrapMethod(W3PlayerAbilityManager) function GetMutationsRequiredForMasterStage( stage : int ): int {
+    var customMutationsReq: int = this.GetCustomMutationsForUnlock(stage);
+
+    if (customMutationsReq >= 0) {
+		return customMutationsReq;
+	}
+
     return wrappedMethod(stage);
 }
 
-@wrapMethod(W3PlayerAbilityManager) function GetMutationColors( mutationType : EPlayerMutationType ) : array< ESkillColor > {
+@wrapMethod(W3PlayerAbilityManager) function GetMutationColors( mutationType : EPlayerMutationType ): array< ESkillColor > {
     var allColors : array< ESkillColor >;
-    if (!CSUGetMutationsColourLocked()) {
+    if (!CSUGetMutationsColourLocked()) {	//Menu allows all colours
         allColors.PushBack(SC_Blue);
         allColors.PushBack(SC_Red);
         allColors.PushBack(SC_Green);
-        allColors.PushBack(SC_Yellow); // Allow General skills
-        return allColors;
+        allColors.PushBack(SC_Yellow); 		//Add General skills
+        return allColors;					//Unlocked
     }
-    return wrappedMethod(mutationType);
+
+    return wrappedMethod(mutationType);		//Locked to mutation colour
 }
 
-@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills() : void {
+//Effectively replaceMethod
+@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void {
 	var csu_i, csu_slotsCount : int;
 	var csu_curSlot      : SSkillSlot;
 	var csu_skillSlots   : array<SSkillSlot>;
@@ -344,14 +349,15 @@ struct CSUSkillCost {
 	csu_skillSlots = thePlayer.GetSkillSlots();
 	csu_slotsCount = csu_skillSlots.Size();
 	csu_gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
-	
 	csu_equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
 	
-	if( csu_equippedMutationId != EPMT_None ) {
+	if( csu_equippedMutationId != EPMT_None ) 
+	{
 		csu_equippedMutation = GetWitcherPlayer().GetMutation( csu_equippedMutationId );
 	}
 	
-	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 ) {
+	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 ) 
+	{
 		csu_curSlot = csu_skillSlots[csu_i];
 		csu_equipedSkill = thePlayer.GetPlayerSkill( csu_curSlot.socketedSkill );
 		
@@ -364,64 +370,65 @@ struct CSUSkillCost {
 		csu_gfxSlots.SetMemberFlashInt( 'groupID', csu_curSlot.groupID );
 		csu_gfxSlots.SetMemberFlashBool( 'unlocked', csu_curSlot.unlocked );
 		
-			csu_colorBorderId = "";
-			if( csu_curSlot.id >= BSS_SkillSlot1 ) {
-				csu_gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
-				csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( csu_curSlot.id - BSS_SkillSlot1 + 1 ) );
+		csu_colorBorderId = "";
+		if( csu_curSlot.id >= BSS_SkillSlot1 ) 
+		{
+			csu_gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
+			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( csu_curSlot.id - BSS_SkillSlot1 + 1 ) );
+			
+			if (csu_equippedMutationId != EPMT_None) 
+			{
+				csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId ); //Use our logic
 				
-				if (csu_equippedMutationId != EPMT_None) {
-					csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId );
-					
-					if( csu_colorsList.Contains(SC_Red) )
-					{
-						csu_colorBorderId += "Red";
-					}
-					
-					if( csu_colorsList.Contains(SC_Green) )
-					{
-						csu_colorBorderId += "Green";
-					}
-					
-					if( csu_colorsList.Contains(SC_Blue) )
-					{
-						csu_colorBorderId += "Blue";
-					}
-
-					if( csu_colorsList.Contains(SC_Yellow) )
-					{
-						csu_colorBorderId += "Yellow";
-					}
+				if( csu_colorsList.Contains(SC_Red) )
+				{
+					csu_colorBorderId += "Red";
 				}
 				
-				csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
+				if( csu_colorsList.Contains(SC_Green) )
+				{
+					csu_colorBorderId += "Green";
+				}
+				
+				if( csu_colorsList.Contains(SC_Blue) )
+				{
+					csu_colorBorderId += "Blue";
+				}
+				if( csu_colorsList.Contains(SC_Yellow) )	//Yellow border for general skills
+				{
+					csu_colorBorderId += "Yellow";
+				}
 			}
-		else {
+			
+			csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
+		}
+		else 
+		{
 			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
 		}
-		
+	
 		csu_gfxSlotsList.PushBackFlashObject( csu_gfxSlots );
 	}
 	
 	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
 }
 
-//Toggle skill purchaseconfirmation popup
+//Toggle skill purchase confirmation popup
 @wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
 	var csu_skill: SSkill;
 	csu_skill = thePlayer.GetPlayerSkill(skillID);
 	
-	if (thePlayer.IsInCombat()) {
+	if (thePlayer.IsInCombat()) {					//Vanilla safety
 		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
 		OnPlaySoundEvent("gui_global_denied");
 		return false;
-	}
-	else {
+
+	} else {	
 		if(!CSUGetConfirmBuy()) {
 			handleBuySkillConfirmation(skillID);
-			return true;
-		}
-		else {
-			return wrappedMethod(skillID);
+			return true;							//Skip to the end
+		} else {
+			return wrappedMethod(skillID);			//Confirm popup
 		}
 	}
 }

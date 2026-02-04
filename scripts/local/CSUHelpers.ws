@@ -18,7 +18,7 @@ function CSUFindSkillIndex(target: ESkill, skillList: array<SSkill>): int {
     return -1;
 }
 
-// Shorthand to set/get values from menu
+//Shorthand to set/get values from menu
 function CSUMenuInt(group: name, key: name, defaultValue: int): int {
     return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
@@ -35,19 +35,20 @@ function CSUMenuSet(groupName : name, varName : name, varValue : string) {
     theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
 }
 
-function CSUGetConfirmBuy() : bool {
+//Menu toggle checks
+function CSUGetConfirmBuy(): bool {
     return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
 }
 
-function CSUGetMutationsColourLocked() : bool {
+function CSUGetMutationsColourLocked(): bool {
     return CSUMenuBool('SlotUnlock', 'MutationsColourLocked');
 }
 
-function CSUShouldColumnsUnlock() : bool {
+function CSUShouldColumnsUnlock(): bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
 }
 
-function CSUShouldRowsUnlock() : bool {
+function CSUShouldRowsUnlock(): bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
 }
 
