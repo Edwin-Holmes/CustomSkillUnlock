@@ -435,59 +435,59 @@ struct CSUSkillCost {
 
 //Clear purchases and activations; refresh character panel
 @addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
-		//Vanilla cleardevelop without the inventory logic + collect & restore xp / mutagens
-		var i: int;
-		var abs: array<name>;
-		var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
-		var am : W3PlayerAbilityManager;	
-	    var tempMutations : array<SMutation>;
-	    var spentRed, spentBlue, spentGreen : int;
-	    var inv : CInventoryComponent = this.GetInventory();
+	//Vanilla cleardevelop without the inventory logic + collect & restore xp / mutagens
+	var i: int;
+	var abs: array<name>;
+	var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
+	var am : W3PlayerAbilityManager;	
+    var tempMutations : array<SMutation>;
+    var spentRed, spentBlue, spentGreen : int;
+    var inv : CInventoryComponent = this.GetInventory();
 
-		am = (W3PlayerAbilityManager)abilityManager;				//Store spent greater mutagens	
-	    if (am) {
-	        tempMutations = am.CSUGetMutations();
-	        for (i = 0; i < tempMutations.Size(); i += 1) {
-	            spentRed   += tempMutations[i].progress.redUsed;
-	            spentBlue  += tempMutations[i].progress.blueUsed;
-	            spentGreen += tempMutations[i].progress.greenUsed;
-	        }
-	    }
+	am = (W3PlayerAbilityManager)abilityManager;				//Store spent greater mutagens	
+    if (am) {
+        tempMutations = am.CSUGetMutations();
+        for (i = 0; i < tempMutations.Size(); i += 1) {
+            spentRed   += tempMutations[i].progress.redUsed;
+            spentBlue  += tempMutations[i].progress.blueUsed;
+            spentGreen += tempMutations[i].progress.greenUsed;
+        }
+    }
+
+	delete abilityManager;
+	delete levelManager;
+	delete effectManager;
 	
-		delete abilityManager;
-		delete levelManager;
-		delete effectManager;
+	
+	GetCharacterStats().GetAbilities(abs, false);
+	for(i=0; i<abs.Size(); i+=1)
+		RemoveAbility(abs[i]);
 		
-		
-		GetCharacterStats().GetAbilities(abs, false);
-		for(i=0; i<abs.Size(); i+=1)
-			RemoveAbility(abs[i]);
-			
-		
-		abs.Clear();
-		GetCharacterStatsParam(abs);		
-		for(i=0; i<abs.Size(); i+=1)
-			AddAbility(abs[i]);
+	
+	abs.Clear();
+	GetCharacterStatsParam(abs);		
+	for(i=0; i<abs.Size(); i+=1)
+		AddAbility(abs[i]);
+				
+	
+	levelManager = new W3LevelManager in this;			
+	levelManager.Initialize();
+	levelManager.PostInit(this, false, true);		
 					
-		
-		levelManager = new W3LevelManager in this;			
-		levelManager.Initialize();
-		levelManager.PostInit(this, false, true);		
-						
-		
-		AddAbility('GeraltSkills_Testing');
-		SetAbilityManager();		
-		abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
-		
-		SetEffectManager();
-		
-		abilityManager.PostInit();
+	
+	AddAbility('GeraltSkills_Testing');
+	SetAbilityManager();		
+	abilityManager.Init(this, GetCharacterStats(), false, theGame.GetDifficultyMode());
+	
+	SetEffectManager();
+	
+	abilityManager.PostInit();
 
-		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level
+	this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level
 
-		if (spentRed > 0)   inv.AddAnItem('Greater mutagen red', spentRed, true, true);			//Restore spent greater mutagens
-		if (spentBlue > 0)  inv.AddAnItem('Greater mutagen blue', spentBlue, true, true);
-		if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);	
+	if (spentRed > 0)   inv.AddAnItem('Greater mutagen red', spentRed, true, true);			//Restore spent greater mutagens
+	if (spentBlue > 0)  inv.AddAnItem('Greater mutagen blue', spentBlue, true, true);
+	if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);	
 
-		tempMutations.Clear();		
+	tempMutations.Clear();		
 }
