@@ -439,15 +439,18 @@ struct CSUSkillCost {
 		var i: int;
 		var abs: array<name>;
 		var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
-		var am: W3PlayerAbilityManager = (W3PlayerAbilityManager)abilityManager;
-    	var spentRed, spentBlue, spentGreen: int;
-    	var inv: CInventoryComponent = this.GetInventory();
+		var am : W3PlayerAbilityManager;	
+	    var tempMutations : array<SMutation>;
+	    var spentRed, spentBlue, spentGreen : int;
+	    var inv : CInventoryComponent = this.GetInventory();
 
-		if (am) {													//Store spent greater mutagens	
-	        for (i = 0; i < am.mutations.Size(); i += 1) {
-	            spentRed   += am.mutations[i].progress.redUsed;
-	            spentBlue  += am.mutations[i].progress.blueUsed;
-	            spentGreen += am.mutations[i].progress.greenUsed;
+		am = (W3PlayerAbilityManager)abilityManager;				//Store spent greater mutagens	
+	    if (am) {
+	        tempMutations = am.CSUGetMutations();
+	        for (i = 0; i < tempMutations.Size(); i += 1) {
+	            spentRed   += tempMutations[i].progress.redUsed;
+	            spentBlue  += tempMutations[i].progress.blueUsed;
+	            spentGreen += tempMutations[i].progress.greenUsed;
 	        }
 	    }
 	
@@ -484,5 +487,7 @@ struct CSUSkillCost {
 
 		if (spentRed > 0)   inv.AddAnItem('Greater mutagen red', spentRed, true, true);			//Restore spent greater mutagens
 		if (spentBlue > 0)  inv.AddAnItem('Greater mutagen blue', spentBlue, true, true);
-		if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);			
+		if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);	
+
+		tempMutations.Clear();		
 }

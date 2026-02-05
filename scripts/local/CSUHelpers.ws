@@ -25,6 +25,11 @@ function CSUMenuSet(groupName : name, varName : name, varValue : string) {
     theGame.GetInGameConfigWrapper().SetVarValue(groupName, varName, varValue);
 }
 
+//For character reset
+@addMethod(W3PlayerAbilityManager) public function CSUGetMutations(): array<SMutation> { 
+    return mutations; 
+}
+
 //Menu toggle checks
 function CSUGetConfirmBuy(): bool {
     return CSUMenuBool('SkillUnlockCost', 'ConfirmBuy');
