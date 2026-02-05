@@ -330,89 +330,88 @@ struct CSUSkillCost {
     return wrappedMethod(mutationType);		//Locked to mutation colour
 }
 
-//Effectively replaceMethod :(
-@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void {
-	var csu_i, csu_slotsCount : int;
-	var csu_curSlot      : SSkillSlot;
-	var csu_skillSlots   : array<SSkillSlot>;
-	var csu_equipedSkill : SSkill;
-	var csu_gfxSlots     : CScriptedFlashObject;
-	var csu_gfxSlotsList : CScriptedFlashArray;
-	
-	var csu_equippedMutationId : EPlayerMutationType;
-	var csu_equippedMutation   : SMutation;
-	var csu_colorsList		   : array< ESkillColor >;
-	var csu_colorBorderId      : string;
+//Effectively replaceMethod because of the flash array :(
+@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void 
+{
+	var i, slotsCount : int;
+	var curSlot      : SSkillSlot;
+	var skillSlots   : array<SSkillSlot>;
+	var equipedSkill : SSkill;
+	var gfxSlots     : CScriptedFlashObject;
+	var gfxSlotsList : CScriptedFlashArray;
+	var equippedMutationId : EPlayerMutationType;
+	var colorsList		   : array< ESkillColor >;
+	var colorBorderId      : string;
 	
 	wrappedMethod();
-
-	csu_skillSlots = thePlayer.GetSkillSlots();
-	csu_slotsCount = csu_skillSlots.Size();
-	csu_gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
-	csu_equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
 	
-	if( csu_equippedMutationId != EPMT_None ) 
-	{
-		csu_equippedMutation = GetWitcherPlayer().GetMutation( csu_equippedMutationId );
+	if ( CSUGetMutationsColourLocked() ) {
+		return;
 	}
+
+	skillSlots = thePlayer.GetSkillSlots();
+	slotsCount = skillSlots.Size();
+	gfxSlotsList = m_flashValueStorage.CreateTempFlashArray();
+	equippedMutationId = GetWitcherPlayer().GetEquippedMutationType();
 	
-	for( csu_i=0; csu_i < csu_slotsCount; csu_i+=1 ) 
+	for( i=0; i < slotsCount; i+=1 ) 
 	{
-		csu_curSlot = csu_skillSlots[csu_i];
-		csu_equipedSkill = thePlayer.GetPlayerSkill( csu_curSlot.socketedSkill );
+		curSlot = skillSlots[i];
+		equipedSkill = thePlayer.GetPlayerSkill( curSlot.socketedSkill );
 		
-		csu_gfxSlots = m_flashValueStorage.CreateTempFlashObject();
-		GetSkillGFxObject( csu_equipedSkill, false, csu_gfxSlots );
+		gfxSlots = m_flashValueStorage.CreateTempFlashObject();
+		GetSkillGFxObject( equipedSkill, false, gfxSlots );
 		
-		csu_gfxSlots.SetMemberFlashInt( 'tabId', GetTabForSkill( csu_curSlot.socketedSkill ) );
-		csu_gfxSlots.SetMemberFlashInt( 'slotId', csu_curSlot.id );
-		csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
-		csu_gfxSlots.SetMemberFlashInt( 'groupID', csu_curSlot.groupID );
-		csu_gfxSlots.SetMemberFlashBool( 'unlocked', csu_curSlot.unlocked );
+		gfxSlots.SetMemberFlashInt( 'tabId', GetTabForSkill( curSlot.socketedSkill ) );
+		gfxSlots.SetMemberFlashInt( 'slotId', curSlot.id );
+		gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', curSlot.unlockedOnLevel );
+		gfxSlots.SetMemberFlashInt( 'groupID', curSlot.groupID );
+		gfxSlots.SetMemberFlashBool( 'unlocked', curSlot.unlocked );
 		
-		csu_colorBorderId = "";
-		if( csu_curSlot.id >= BSS_SkillSlot1 ) 
+		colorBorderId = "";
+		if( curSlot.id >= BSS_SkillSlot1 ) 
 		{
-			csu_gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
-			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( csu_curSlot.id - BSS_SkillSlot1 + 1 ) );
+			gfxSlots.SetMemberFlashBool( 'isMutationSkill', true );
+			gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', ( curSlot.id - BSS_SkillSlot1 + 1 ) );
 			
-			if (csu_equippedMutationId != EPMT_None) 
+			if (equippedMutationId != EPMT_None) 
 			{
-				csu_colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( csu_equippedMutationId ); //Use our logic
+				colorsList = ((W3PlayerAbilityManager)thePlayer.abilityManager).GetMutationColors( equippedMutationId );	//Use my colour list
 				
-				if( csu_colorsList.Contains(SC_Red) )
+				if( colorsList.Contains(SC_Red) )
 				{
-					csu_colorBorderId += "Red";
+					colorBorderId += "Red";
 				}
 				
-				if( csu_colorsList.Contains(SC_Green) )
+				if( colorsList.Contains(SC_Green) )
 				{
-					csu_colorBorderId += "Green";
+					colorBorderId += "Green";
 				}
 				
-				if( csu_colorsList.Contains(SC_Blue) )
+				if( colorsList.Contains(SC_Blue) )
 				{
-					csu_colorBorderId += "Blue";
+					colorBorderId += "Blue";
 				}
 
-				if( csu_colorsList.Contains(SC_Yellow) )	//Yellow border for general skills
+				if( colorsList.Contains(SC_Yellow) )	//Yellow border for general skills
 				{
-					csu_colorBorderId += "Yellow";
+					colorBorderId += "Yellow";
 				}
 			}
 			
-			csu_gfxSlots.SetMemberFlashString( 'colorBorder', csu_colorBorderId );
+			gfxSlots.SetMemberFlashString( 'colorBorder', colorBorderId );
 		}
 		else 
 		{
-			csu_gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', csu_curSlot.unlockedOnLevel );
+			gfxSlots.SetMemberFlashInt( 'unlockedOnLevel', curSlot.unlockedOnLevel );
 		}
 	
-		csu_gfxSlotsList.PushBackFlashObject( csu_gfxSlots );
+		gfxSlotsList.PushBackFlashObject( gfxSlots );
 	}
 	
-	m_flashValueStorage.SetFlashArray( "character.skills.slots", csu_gfxSlotsList );
+	m_flashValueStorage.SetFlashArray( "character.skills.slots", gfxSlotsList );
 }
+
 
 //Toggle skill purchase confirmation popup
 @wrapMethod(CR4CharacterMenu) function OnUpgradeSkill(skillID : ESkill) {
