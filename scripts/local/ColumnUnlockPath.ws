@@ -3,7 +3,7 @@ struct ColumnUnlockPair {
     var childSkill: ESkill;
 }
 
-// Initialize and return skill dependencies
+//Initialize and return skill dependencies
 @addMethod(W3PlayerAbilityManager) private function GetColumnUnlockPairs(): array<ColumnUnlockPair> {
     var columnPairs: array<ColumnUnlockPair>;
     var columnUnlock: ColumnUnlockPair;
@@ -47,7 +47,7 @@ struct ColumnUnlockPair {
     columnUnlock.parentSkill = S_Magic_s13; columnUnlock.childSkill = S_Magic_s04; columnPairs.PushBack(columnUnlock); 
     columnUnlock.parentSkill = S_Magic_s04; columnUnlock.childSkill = S_Magic_s15; columnPairs.PushBack(columnUnlock);
     columnUnlock.parentSkill = S_Magic_s15; columnUnlock.childSkill = S_Magic_s14; columnPairs.PushBack(columnUnlock);
-    // Axii column
+        // Axii column
     columnUnlock.parentSkill = S_Magic_s17; columnUnlock.childSkill = S_Magic_s05; columnPairs.PushBack(columnUnlock); 
     columnUnlock.parentSkill = S_Magic_s05; columnUnlock.childSkill = S_Magic_s18; columnPairs.PushBack(columnUnlock);
     columnUnlock.parentSkill = S_Magic_s18; columnUnlock.childSkill = S_Magic_s19; columnPairs.PushBack(columnUnlock);
@@ -79,7 +79,6 @@ struct ColumnUnlockPair {
 
 @addMethod(W3PlayerAbilityManager) public function IsColumnRequirementMet(skill: ESkill): bool {
     var pairs: array<ColumnUnlockPair>;
-    var skills: array<SSkill>;
     var i: int;
     var parentIndex: int;
 
@@ -88,18 +87,17 @@ struct ColumnUnlockPair {
     }
 
     pairs = this.GetColumnUnlockPairs();
-    skills = thePlayer.GetPlayerSkills();
 
     for (i = 0; i < pairs.Size(); i += 1) {
-        if (pairs[i].childSkill == skill) {                                 //Is the skill in the array as a child?
-            parentIndex = CSUFindSkillIndex(pairs[i].parentSkill, skills);  //Find its parent skill
+        if (pairs[i].childSkill == skill) {                                         //Is the skill in the array as a child?
+            parentIndex = this.CSUFindSkillIndex(pairs[i].parentSkill, skills);     //Find its parent skill
             if (parentIndex != -1 && skills[parentIndex].level == skills[parentIndex].maxLevel) {
-                return true;                                                //Parent skill max; unlock
+                return true;                                                        //Parent skill max; unlock
             }
 
-            return false;                                                   //Parent skill not max; stay locked    
+            return false;                                                           //Parent skill not max; stay locked    
         }
     }
     
-    return true;                                                            //Not a child skill (i.e. Root or General); unlock
+    return true;                                                                    //Not a child skill (i.e. Root or General); unlock
 }

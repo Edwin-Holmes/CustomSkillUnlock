@@ -1,4 +1,4 @@
-function CSUCheckMenuResetToggle() {
+@addMethod(CR4IngameMenu) private function CSUCheckMenuResetToggle() {
     var resetEnabled: bool = CSUMenuBool('CSUReset', 'ResetProgression');
     var wp: W3PlayerWitcher = GetWitcherPlayer();
 
@@ -8,7 +8,7 @@ function CSUCheckMenuResetToggle() {
     }
 }
 
-function CSUFindSkillIndex(target: ESkill, skillList: array<SSkill>): int {
+@addMethod(W3PlayerAbilityManager) private function CSUFindSkillIndex(target: ESkill, skillList: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skillList.Size(); i += 1) {
         if (skillList[i].skillType == target) { 		//Loook thorugh SSkill array for an ESkill	

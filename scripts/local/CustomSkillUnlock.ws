@@ -249,7 +249,7 @@ struct CSUSkillCost {
 	var retVal: bool;
 
 	retVal = wrappedMethod();											//Store vanilla bool return value
-	CSUCheckMenuResetToggle();											//Check reset progression toggle
+	this.CSUCheckMenuResetToggle();											//Check reset progression toggle
 	
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
 	if (am) {
