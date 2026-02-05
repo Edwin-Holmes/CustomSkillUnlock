@@ -120,14 +120,14 @@ struct CSUSkillCost {
     }
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetSlotUnlocks(out unlockLevel : array<int>) {
+@addMethod(W3PlayerAbilityManager) private function GetSlotUnlocks(out unlockLevel: array<int>) {
 	var i: int;
 	var slotName: name;
 
 	//Populate array
     unlockLevel.Clear();
 
-    unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot1Lvl', 0));
+    unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot1Lvl', 1));
 	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot2Lvl', 2));
 	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot3Lvl', 4));
 	unlockLevel.PushBack(CSUMenuInt('SlotUnlock', 'Slot4Lvl', 6));
@@ -164,7 +164,7 @@ struct CSUSkillCost {
 	}
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetMutagenUnlocks(out mutagenUnlockLevel : array<int>) {
+@addMethod(W3PlayerAbilityManager) private function GetMutagenUnlocks(out mutagenUnlockLevel: array<int>) {
 	var i: int;
 	var mutagenName: name;
 	
@@ -193,9 +193,9 @@ struct CSUSkillCost {
 }
 
 @addMethod(W3PlayerAbilityManager) public function UpdateSlotUnlocks() {
-	var unlockLevel : array<int>;
-	var mutagenUnlockLevel : array<int>;
-	var i : int;
+	var unlockLevel: array<int>;
+	var mutagenUnlockLevel: array<int>;
+	var i: int;
 
 	this.GetSlotUnlocks(unlockLevel);									//Get user unlock levels	
 	for (i = 0; i < skillSlots.Size(); i += 1) {
@@ -212,7 +212,7 @@ struct CSUSkillCost {
 	}
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetCustomMutationsForUnlock(stage : int): int {
+@addMethod(W3PlayerAbilityManager) private function GetCustomMutationsForUnlock(stage: int): int {
     var costSlot1: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot1', 2);
     var costSlot2: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot2', 4);
     var costSlot3: int = CSUMenuInt('SlotUnlock', 'MutationCostSlot3', 8);
@@ -245,11 +245,11 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(CR4IngameMenu) function OnClosingMenu() {
-	var am : W3PlayerAbilityManager;
+	var am: W3PlayerAbilityManager;
 	var retVal: bool;
 
 	retVal = wrappedMethod();											//Store vanilla bool return value
-	this.CSUCheckMenuResetToggle();											//Check reset progression toggle
+	this.CSUCheckMenuResetToggle();										//Check reset progression toggle
 	
 	am = (W3PlayerAbilityManager)GetWitcherPlayer().abilityManager;
 	if (am) {
@@ -418,7 +418,7 @@ struct CSUSkillCost {
 	var csu_skill: SSkill;
 	csu_skill = thePlayer.GetPlayerSkill(skillID);
 	
-	if (thePlayer.IsInCombat()) {					//Vanilla safety
+	if (thePlayer.IsInCombat()) {					//Vanilla prohibition
 		showNotification(GetLocStringByKeyExt("menu_cannot_perform_action_combat"));
 		OnPlaySoundEvent("gui_global_denied");
 		return false;
@@ -433,12 +433,12 @@ struct CSUSkillCost {
 	}
 }
 
-//Clear perchases and activations; refresh character panel
+//Clear purchases and activations; refresh character panel
 @addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
 		//Vanilla cleardevelop without the inventory logic + collect & restore xp
-		var i : int;
-		var abs : array<name>;
-		var playerXP : int = levelManager.GetPointsTotal(EExperiencePoint);
+		var i: int;
+		var abs: array<name>;
+		var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
 	
 		delete abilityManager;
 		delete levelManager;
