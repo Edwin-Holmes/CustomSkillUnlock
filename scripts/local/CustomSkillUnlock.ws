@@ -435,10 +435,21 @@ struct CSUSkillCost {
 
 //Clear purchases and activations; refresh character panel
 @addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
-		//Vanilla cleardevelop without the inventory logic + collect & restore xp
+		//Vanilla cleardevelop without the inventory logic + collect & restore xp / mutagens
 		var i: int;
 		var abs: array<name>;
 		var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
+		var am: W3PlayerAbilityManager = (W3PlayerAbilityManager)abilityManager;
+    	var spentRed, spentBlue, spentGreen: int;
+    	var inv: CInventoryComponent = this.GetInventory();
+
+		if (am) {													//Store spent greater mutagens	
+	        for (i = 0; i < am.mutations.Size(); i += 1) {
+	            spentRed   += am.mutations[i].progress.redUsed;
+	            spentBlue  += am.mutations[i].progress.blueUsed;
+	            spentGreen += am.mutations[i].progress.greenUsed;
+	        }
+	    }
 	
 		delete abilityManager;
 		delete levelManager;
@@ -469,5 +480,9 @@ struct CSUSkillCost {
 		
 		abilityManager.PostInit();
 
-		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level			
+		this.AddPoints(EExperiencePoint, playerXP, false);		//Restore player level
+
+		if (spentRed > 0)   inv.AddAnItem('Greater mutagen red', spentRed, true, true);			//Restore spent greater mutagens
+		if (spentBlue > 0)  inv.AddAnItem('Greater mutagen blue', spentBlue, true, true);
+		if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);			
 }
