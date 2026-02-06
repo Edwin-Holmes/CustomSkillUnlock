@@ -280,29 +280,24 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill): bool {
-    var columnMet : bool;
-    var rowMet : bool;
-    var altColumnMet : bool;
-	var perkMet : bool;
+    var rowMet, columnMet, altColumnMet: bool;
 
-	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) { 				//Perks
 		return this.IsPerkRequirementMet(skill);
 	}
 
-    rowMet = wrappedMethod(skill);
-
-    if (CSUShouldAltColumnsUnlock()) {
-        altColumnMet = this.IsAltColumnRequirementMet(skill);
-        
+    rowMet = wrappedMethod(skill);									//Rows (vanilla)
+    
+    if (CSUShouldAltColumnsUnlock()) {								//Alt columns	
+		altColumnMet = this.IsAltColumnRequirementMet(skill);
         if (CSUShouldRowsUnlock()) {
             return altColumnMet || rowMet;
         }
 
         return altColumnMet;
     }
-
-    columnMet = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
     
+    columnMet = this.IsColumnRequirementMet(skill);					//Columns
     if (CSUShouldRowsUnlock()) {
         return columnMet || rowMet;
     }
@@ -311,28 +306,24 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
-    var columnMet : bool;
-    var rowMet : bool;
-    var altColumnMet : bool;
-	var perkMet : bool;
+    var rowMet, columnMet, altColumnMet: bool;
 
-	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {					//Perks
 		return this.IsPerkRequirementMet(skill);
 	}
-    rowMet = wrappedMethod(skill);
 
-    if (CSUShouldAltColumnsUnlock()) {
-        altColumnMet = this.IsAltColumnRequirementMet(skill);
-        
+    rowMet = wrappedMethod(skill);										//Rows (vanilla)	
+
+    if (CSUShouldAltColumnsUnlock()) {									//Alt columns		
+		altColumnMet = this.IsAltColumnRequirementMet(skill);
         if (CSUShouldRowsUnlock()) {
             return altColumnMet || rowMet;
         }
 
         return altColumnMet;
     }
-
-    columnMet = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
     
+	columnMet = this.IsColumnRequirementMet(skill);						//Columns	
     if (CSUShouldRowsUnlock()) {
         return columnMet || rowMet;
     }
