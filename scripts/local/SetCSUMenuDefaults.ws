@@ -17,6 +17,7 @@ function CSU_Initialize() {
         CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', false);
         CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
         CSUMenuSet('SkillUnlockCost', 'EnableAltColumnUnlocks', false);
+        CSUMenuSet('SkillUnlockCost', 'EnablePerkAltUnlock', false);
         CSUMenuSet('SkillUnlockCost', 'SwordTier1', 6);
         CSUMenuSet('SkillUnlockCost', 'SwordTier2', 12);
         CSUMenuSet('SkillUnlockCost', 'SwordTier3', 18);

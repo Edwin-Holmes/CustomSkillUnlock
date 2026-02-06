@@ -28,6 +28,13 @@ struct CSUAltColumn {
     col.columnName = 'Mutagens';     col.s1 = S_Alchemy_s18; col.s2 = S_Alchemy_s13; col.s3 = S_Alchemy_s19; col.s4 = S_Alchemy_s14; columns.PushBack(col);
     col.columnName = 'Trial';        col.s1 = S_Alchemy_s16; col.s2 = S_Alchemy_s20; col.s3 = S_Alchemy_s15; col.s4 = S_Alchemy_s17; columns.PushBack(col);
 
+	// General Branch (Perks)
+	col.columnName = 'PerkCol1';  	 col.s1 = S_Perk_01; col.s2 = S_Perk_02; col.s3 = S_Perk_13; col.s4 = S_Perk_14; columns.PushBack(col);
+	col.columnName = 'PerkCol2';  	 col.s1 = S_Perk_04; col.s2 = S_Perk_09; col.s3 = S_Perk_17; col.s4 = S_Perk_15; columns.PushBack(col);
+	col.columnName = 'PerkCol3';  	 col.s1 = S_Perk_05; col.s2 = S_Perk_10; col.s3 = S_Perk_18; col.s4 = S_Perk_16; columns.PushBack(col);
+	col.columnName = 'PerkCol4';  	 col.s1 = S_Perk_06; col.s2 = S_Perk_11; col.s3 = S_Perk_19; col.s4 = S_Perk_21; columns.PushBack(col);
+	col.columnName = 'PerkCol5';  	 col.s1 = S_Perk_07; col.s2 = S_Perk_12; col.s3 = S_Perk_20; col.s4 = S_Perk_22; columns.PushBack(col);
+
     return columns;
 }
 
@@ -35,6 +42,7 @@ struct CSUAltColumn {
     var columns: array<CSUAltColumn>;
     var i, currentSkillRow, totalSpent: int;
     var found: bool = false;
+	var isPerk: bool = false;
 
     if (!CSUShouldAltColumnsUnlock()) {
         return false;
@@ -49,6 +57,12 @@ struct CSUAltColumn {
         else if (columns[i].s4 == skill) { currentSkillRow = 4; found = true; }
 
         if (found) {
+			isPerk = (skill >= S_Perk_01 && skill <= S_Perk_22);
+
+			if (isPerk && !CSUShouldPerksAltUnlock()) {
+				return true; // Perks stay unlocked if toggle is off
+			}
+
             // Calculate total points spent in this specific column
             totalSpent = this.GetSkillLevel(columns[i].s1) + this.GetSkillLevel(columns[i].s2) + 
                          this.GetSkillLevel(columns[i].s3) + this.GetSkillLevel(columns[i].s4);
@@ -57,8 +71,12 @@ struct CSUAltColumn {
             switch(currentSkillRow) {
                 case 1:  return true;            // Row 1: Always unlocked
                 case 2:  return totalSpent >= 1; // Row 2: Need 1 point in column
-                case 3:  return totalSpent >= 3; // Row 3: Need 3 points in column
-                case 4:  return totalSpent >= 6; // Row 4: Need 6 points in column
+                case 3:  
+					if (isPerk) return totalSpent >= 2;
+					return totalSpent >= 3; 	 // Row 3: Main: 3, Perk: 2
+                case 4:  
+					if (isPerk) return totalSpent >= 3;
+					return totalSpent >= 6; 	 // Row 4: Main: 6, Perk: 3
                 default: return true;
             }
         }

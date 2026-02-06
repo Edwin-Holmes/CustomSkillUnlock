@@ -51,6 +51,10 @@ function CSUShouldAltColumnsUnlock(): bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableAltColumnUnlocks');
 }
 
+function CSUShouldPerksAltUnlock(): bool {
+	return CSUMenuBool('SkillUnlockCost', 'EnablePerkAltUnlock');
+}
+
 @addMethod(CR4IngameMenu) private function CSUCheckMenuResetToggle() {
     var resetEnabled: bool = CSUMenuBool('CSUReset', 'ResetProgression');
     var wp: W3PlayerWitcher = GetWitcherPlayer();
