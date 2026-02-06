@@ -18,10 +18,10 @@ struct CSURowThreshold {
 
 @addMethod(W3PlayerAbilityManager) public function IsPerkRequirementMet(skill: ESkill): bool {
     var columns: array<CSUAltColumn>;
-    var i, currentSkillRow, totalSpentCol, totalSpentBranch: int;
-    var foundInGrid: bool = false;
-    var rowMet: bool = false;
-    var colMet: bool = false;
+    var i: int;
+    var currentSkillRow, totalSpentCol, totalSpentBranch: int;
+    var found: bool;
+    var rowMet, colMet: bool;
     var rowActive: bool = CSUShouldPerkRowsUnlock();
     var colActive: bool = CSUShouldPerkColumnsUnlock();
     
@@ -29,34 +29,33 @@ struct CSURowThreshold {
         return true;
     }
 
-    // Both disabled = all perks unlocked (No requirements)
-    if (!rowActive && !colActive) {
+    if (!rowActive && !colActive) {         //Both disabled = all unlocked (Vanilla)
         return true;
     }
 
-    // Determine position in the grid once
-    columns = this.GetPerkColumns();
+    columns = this.GetPerkColumns();        //Find grid position
     for (i = 0; i < columns.Size(); i += 1) {
-        if      (columns[i].s1 == skill) { currentSkillRow = 1; foundInGrid = true; }
-        else if (columns[i].s2 == skill) { currentSkillRow = 2; foundInGrid = true; }
-        else if (columns[i].s3 == skill) { currentSkillRow = 3; foundInGrid = true; }
-        else if (columns[i].s4 == skill) { currentSkillRow = 4; foundInGrid = true; }
-        else if (columns[i].s5 == skill) { currentSkillRow = 5; foundInGrid = true; }
+        if      (columns[i].s1 == skill) { currentSkillRow = 1; found = true; }
+        else if (columns[i].s2 == skill) { currentSkillRow = 2; found = true; }
+        else if (columns[i].s3 == skill) { currentSkillRow = 3; found = true; }
+        else if (columns[i].s4 == skill) { currentSkillRow = 4; found = true; }
+        else if (columns[i].s5 == skill) { currentSkillRow = 5; found = true; }
 
-        if (foundInGrid) {
+        if (found) {
             break;
         }
     }
 
-    // Skills not in our grid are not restricted by column logic, but follow Row logic if active
-    if (!foundInGrid) {
-        if (!rowActive) return true;
+    if (!found) {
+        if (!rowActive) {
+            return true;
+        }
+
         totalSpentBranch = this.GetPathPointsSpent(ESP_Perks);
         return (totalSpentBranch >= 1);
     }
 
-    // --- Row Unlock Logic (Global branch spending) ---
-    if (rowActive) {
+    if (rowActive) {    //Row Unlock
         totalSpentBranch = this.GetPathPointsSpent(ESP_Perks);
         switch(currentSkillRow) {
             case 1:  rowMet = true; break;
@@ -68,8 +67,7 @@ struct CSURowThreshold {
         }
     }
 
-    // --- Column Unlock Logic (Immediate parent chain) ---
-    if (colActive) {
+    if (colActive) {    //Column Unlock
         switch(currentSkillRow) {
             case 1:  colMet = true; break;
             case 2:  colMet = (this.GetSkillLevel(columns[i].s1) > 0); break; // Parent in grid

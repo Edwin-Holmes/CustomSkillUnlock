@@ -44,32 +44,30 @@ struct CSUAltColumn {
 
     columns = this.GetAltColumns();
 
-    for (i = 0; i < columns.Size(); i += 1) {
+    for (i = 0; i < columns.Size(); i += 1) {           //Get grid position
         if      (columns[i].s1 == skill) { currentSkillRow = 1; found = true; }
         else if (columns[i].s2 == skill) { currentSkillRow = 2; found = true; }
         else if (columns[i].s3 == skill) { currentSkillRow = 3; found = true; }
         else if (columns[i].s4 == skill) { currentSkillRow = 4; found = true; }
 
         if (found) {
-            // Get points spent in column
             totalSpent = this.GetSkillLevel(columns[i].s1) + this.GetSkillLevel(columns[i].s2) + 
                          this.GetSkillLevel(columns[i].s3) + this.GetSkillLevel(columns[i].s4);
 
-            // Check row thresholds
             switch(currentSkillRow) {
                 case 1:  
-					return true;            // Row 1: Always unlocked
+					return true;            
                 case 2:  
-					return totalSpent >= 1; // Row 2: Need 1 point in column
+					return totalSpent >= 1; 
                 case 3:  
-                    return totalSpent >= 3;  // Row 3: Need 3 points
+                    return totalSpent >= 3;  
                 case 4:  
-                    return totalSpent >= 6;  // Row 4: Need 6 points
+                    return totalSpent >= 6;  
                 default: 
                     return true;
             }
         }
     }
 
-    return true; // Not part of the alt unlock system
+    return true; //Perks / first row
 }
