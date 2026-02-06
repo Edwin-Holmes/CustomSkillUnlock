@@ -435,13 +435,13 @@ struct CSUSkillCost {
 
 //Clear purchases and activations; refresh character panel
 @addMethod(W3PlayerWitcher) public final function CSUPlayerReset() {
-	//Vanilla cleardevelop without the inventory logic + collect & restore xp / mutagens
-	var i: int;
+	//Vanilla cleardevelop without the inventory logic + collect & restore xp / mutagens / skill points
+	var i: int;															//Vanilla
 	var abs: array<name>;
-	var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
-	var pointsBefore: int = levelManager.GetPointsTotal(ESkillPoint);
+	var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);	//XP (level)
+	var pointsBefore: int = levelManager.GetPointsTotal(ESkillPoint);	//Skill points
 	var pointsAfter: int;
-	var am : W3PlayerAbilityManager;	
+	var am : W3PlayerAbilityManager;									//Greater mutagens	
     var tempMutations : array<SMutation>;
     var spentRed, spentBlue, spentGreen : int;
     var inv : CInventoryComponent = this.GetInventory();
@@ -495,7 +495,7 @@ struct CSUSkillCost {
 
 	pointsAfter = levelManager.GetPointsTotal(ESkillPoint);
     
-    if (pointsBefore > pointsAfter) {
+    if (pointsBefore > pointsAfter) {						//Restore any skill points that didn't come from level-ups
         this.AddPoints(ESkillPoint, pointsBefore - pointsAfter, false);
     }	
 }
