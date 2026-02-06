@@ -40,23 +40,23 @@ function CSUGetMutationsColourLocked(): bool {
 }
 
 function CSUShouldPerkRowsUnlock(): bool {
-	return CSUMenuBool('SkillUnlockCost', 'EnablePerkRowUnlocks');
+	return CSUMenuBool('UnlockMethods', 'EnablePerkRowUnlocks');
 }
 
 function CSUShouldPerkColumnsUnlock(): bool {
-	return CSUMenuBool('SkillUnlockCost', 'EnablePerkColumnUnlocks');
+	return CSUMenuBool('UnlockMethods', 'EnablePerkColumnUnlocks');
 }
 
 function CSUShouldColumnsUnlock(): bool {
-    return CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
+    return CSUMenuBool('UnlockMethods', 'EnableColumnUnlocks');
 }
 
 function CSUShouldRowsUnlock(): bool {
-    return CSUMenuBool('SkillUnlockCost', 'EnableRowUnlocks');
+    return CSUMenuBool('UnlockMethods', 'EnableRowUnlocks');
 }
 
 function CSUShouldAltColumnsUnlock(): bool {
-    return CSUMenuBool('SkillUnlockCost', 'EnableAltColumnUnlocks');
+    return CSUMenuBool('UnlockMethods', 'EnableAltColumnUnlocks');
 }
 
 @addMethod(CR4IngameMenu) private function CSUCheckMenuResetToggle() {

@@ -1,4 +1,4 @@
-;meta[language=en]
+﻿;meta[language=en]
 ; id      |key(hex)|key(str)| text
 ;
 ; comment lines use ; as first character
@@ -65,3 +65,7 @@
 2110822046||preset_value_CSU_Preset_Default|<font color="#EFB700">Default</font>
 2110822047||preset_value_CSU_Preset_Half|<font color="#008A00">Half</font>
 2110822048||preset_value_CSU_Preset_Double|<font color="#8A0000">Double</font>
+;
+; Unlock Methods Section
+2110822049||panel_Unlock_Methods|<font color="#AD9563">Unlock Methods</font>
+2110822050||preset_Mods_CSU_Unlock_Methods|<font color="#AD9563">Unlock Method Settings</font>
