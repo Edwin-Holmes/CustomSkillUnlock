@@ -441,12 +441,12 @@ struct CSUSkillCost {
 	var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);	//XP (level)
 	var pointsBefore: int = levelManager.GetPointsTotal(ESkillPoint);	//Skill points
 	var pointsAfter: int;
-	var am : W3PlayerAbilityManager;									//Greater mutagens	
-    var tempMutations : array<SMutation>;
-    var spentRed, spentBlue, spentGreen : int;
-    var inv : CInventoryComponent = this.GetInventory();
+	var am: W3PlayerAbilityManager;										//Greater mutagens	
+    var tempMutations: array<SMutation>;
+    var spentRed, spentBlue, spentGreen: int;
+    var inv: CInventoryComponent = this.GetInventory();
 
-	am = (W3PlayerAbilityManager)abilityManager;				//Store spent greater mutagens	
+	am = (W3PlayerAbilityManager)abilityManager;						//Store spent greater mutagens	
     if (am) {
  	    tempMutations = am.CSUGetMutations();
         for (i = 0; i < tempMutations.Size(); i += 1) {
