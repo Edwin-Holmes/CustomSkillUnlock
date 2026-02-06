@@ -41,6 +41,7 @@ struct CSURowThreshold {
         else if (columns[i].s2 == skill) { currentSkillRow = 2; foundInGrid = true; }
         else if (columns[i].s3 == skill) { currentSkillRow = 3; foundInGrid = true; }
         else if (columns[i].s4 == skill) { currentSkillRow = 4; foundInGrid = true; }
+        else if (columns[i].s5 == skill) { currentSkillRow = 5; foundInGrid = true; }
 
         if (foundInGrid) {
             break;
@@ -62,6 +63,7 @@ struct CSURowThreshold {
             case 2:  rowMet = (totalSpentBranch >= 1); break;
             case 3:  rowMet = (totalSpentBranch >= 3); break;
             case 4:  rowMet = (totalSpentBranch >= 6); break;
+            case 5:  rowMet = (totalSpentBranch >= 10); break;
             default: rowMet = true;
         }
     }
@@ -73,6 +75,7 @@ struct CSURowThreshold {
             case 2:  colMet = (this.GetSkillLevel(columns[i].s1) > 0); break; // Parent in grid
             case 3:  colMet = (this.GetSkillLevel(columns[i].s2) > 0); break;
             case 4:  colMet = (this.GetSkillLevel(columns[i].s3) > 0); break;
+            case 5:  colMet = (this.GetSkillLevel(columns[i].s4) > 0); break;
             default: colMet = true;
         }
     }

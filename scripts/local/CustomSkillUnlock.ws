@@ -257,8 +257,12 @@ struct CSUSkillCost {
 		am.UpdateSlotUnlocks();											//Update slot unlock levels
 	}
 
-	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock() && !CSUShouldAltColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
+	if ( !CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock() && !CSUShouldAltColumnsUnlock() ) {	//If both paths disabled set vanilla behaviour
 		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
+	}
+
+	if ( CSUShouldColumnsUnlock() && CSUShouldAltColumnsUnlock() ) {	//Prevent conflict
+		CSUMenuSet('SkillUnlockCost', 'EnableAltColumnUnlocks', false);
 	}
 
 	return retVal;
