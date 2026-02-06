@@ -35,11 +35,11 @@ struct CSURowThreshold {
 
     columns = this.GetPerkColumns();        //Find grid position
     for (i = 0; i < columns.Size(); i += 1) {
-        if      (columns[i].s1 == skill) { currentSkillRow = 1; found = true; }
-        else if (columns[i].s2 == skill) { currentSkillRow = 2; found = true; }
-        else if (columns[i].s3 == skill) { currentSkillRow = 3; found = true; }
-        else if (columns[i].s4 == skill) { currentSkillRow = 4; found = true; }
-        else if (columns[i].s5 == skill) { currentSkillRow = 5; found = true; }
+        if      (columns[i].s1 == skill) {currentSkillRow = 1; found = true;}
+        else if (columns[i].s2 == skill) {currentSkillRow = 2; found = true;}
+        else if (columns[i].s3 == skill) {currentSkillRow = 3; found = true;}
+        else if (columns[i].s4 == skill) {currentSkillRow = 4; found = true;}
+        else if (columns[i].s5 == skill) {currentSkillRow = 5; found = true;}
 
         if (found) {
             break;

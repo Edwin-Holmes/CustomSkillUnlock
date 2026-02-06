@@ -285,12 +285,10 @@ struct CSUSkillCost {
     var altColumnMet : bool;
 	var perkMet : bool;
 
-	// Use dedicated Perk logic if it's a general skill
 	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
 		return this.IsPerkRequirementMet(skill);
 	}
 
-    // Capture vanilla result first (only one call allowed)
     rowMet = wrappedMethod(skill);
 
     if (CSUShouldAltColumnsUnlock()) {
@@ -318,12 +316,9 @@ struct CSUSkillCost {
     var altColumnMet : bool;
 	var perkMet : bool;
 
-	// Use dedicated Perk logic if it's a general skill
 	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
 		return this.IsPerkRequirementMet(skill);
 	}
-
-    // Capture vanilla result first (only one call allowed)
     rowMet = wrappedMethod(skill);
 
     if (CSUShouldAltColumnsUnlock()) {
