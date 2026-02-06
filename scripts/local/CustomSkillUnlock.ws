@@ -439,6 +439,8 @@ struct CSUSkillCost {
 	var i: int;
 	var abs: array<name>;
 	var playerXP: int = levelManager.GetPointsTotal(EExperiencePoint);
+	var pointsBefore: int = levelManager.GetPointsTotal(ESkillPoint);
+	var pointsAfter: int;
 	var am : W3PlayerAbilityManager;	
     var tempMutations : array<SMutation>;
     var spentRed, spentBlue, spentGreen : int;
@@ -446,7 +448,7 @@ struct CSUSkillCost {
 
 	am = (W3PlayerAbilityManager)abilityManager;				//Store spent greater mutagens	
     if (am) {
-        tempMutations = am.CSUGetMutations();
+ 	    tempMutations = am.CSUGetMutations();
         for (i = 0; i < tempMutations.Size(); i += 1) {
             spentRed   += tempMutations[i].progress.redUsed;
             spentBlue  += tempMutations[i].progress.blueUsed;
@@ -489,5 +491,11 @@ struct CSUSkillCost {
 	if (spentBlue > 0)  inv.AddAnItem('Greater mutagen blue', spentBlue, true, true);
 	if (spentGreen > 0) inv.AddAnItem('Greater mutagen green', spentGreen, true, true);	
 
-	tempMutations.Clear();		
+	tempMutations.Clear();
+
+	pointsAfter = levelManager.GetPointsTotal(ESkillPoint);
+    
+    if (pointsBefore > pointsAfter) {
+        this.AddPoints(ESkillPoint, pointsBefore - pointsAfter, false);
+    }	
 }
