@@ -257,8 +257,12 @@ struct CSUSkillCost {
 		am.UpdateSlotUnlocks();											//Update slot unlock levels
 	}
 
-	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
+	if ( !CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock() && !CSUShouldAltColumnsUnlock() ) {	//If both paths disabled set vanilla behaviour
 		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
+	}
+
+	if ( CSUShouldColumnsUnlock() && CSUShouldAltColumnsUnlock() ) {	//Prevent conflict
+		CSUMenuSet('SkillUnlockCost', 'EnableAltColumnUnlocks', false);
 	}
 
 	return retVal;
@@ -276,25 +280,55 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill): bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
-    var rowMet : bool = false;
+    var rowMet, columnMet, altColumnMet: bool;
+
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) { 				//Perks
+		return this.IsPerkRequirementMet(skill);
+	}
+
+    rowMet = wrappedMethod(skill);									//Rows (vanilla)
     
-    if (CSUShouldRowsUnlock()) {
-        rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
+    if (CSUShouldAltColumnsUnlock()) {								//Alt columns	
+		altColumnMet = this.IsAltColumnRequirementMet(skill);
+        if (CSUShouldRowsUnlock()) {
+            return altColumnMet || rowMet;
+        }
+
+        return altColumnMet;
     }
     
-    return columnMet || rowMet;
+    columnMet = this.IsColumnRequirementMet(skill);					//Columns
+    if (CSUShouldRowsUnlock()) {
+        return columnMet || rowMet;
+    }
+    
+    return columnMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
-    var rowMet : bool = false;
-    
-    if (CSUShouldRowsUnlock()) {
-        rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
+    var rowMet, columnMet, altColumnMet: bool;
+
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {					//Perks
+		return this.IsPerkRequirementMet(skill);
+	}
+
+    rowMet = wrappedMethod(skill);										//Rows (vanilla)	
+
+    if (CSUShouldAltColumnsUnlock()) {									//Alt columns		
+		altColumnMet = this.IsAltColumnRequirementMet(skill);
+        if (CSUShouldRowsUnlock()) {
+            return altColumnMet || rowMet;
+        }
+
+        return altColumnMet;
     }
     
-    return columnMet || rowMet;
+	columnMet = this.IsColumnRequirementMet(skill);						//Columns	
+    if (CSUShouldRowsUnlock()) {
+        return columnMet || rowMet;
+    }
+    
+    return columnMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {

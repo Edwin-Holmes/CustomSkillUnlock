@@ -4,7 +4,7 @@
 }
 
 function CSU_Initialize() {
-    var currentVersion: float = 1.2;
+    var currentVersion: float = 2.0;
     var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
 
     if (userVersion == currentVersion) {                                            // Up to date = early exit
@@ -14,8 +14,6 @@ function CSU_Initialize() {
     // Skill Unlock Cost Init
     if (userVersion < 1.0) {                                                        // Apply default settings   
         CSUMenuSet('SkillUnlockCost', 'ConfirmBuy', true);                
-        CSUMenuSet('SkillUnlockCost', 'EnableColumnUnlocks', false);
-        CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
         CSUMenuSet('SkillUnlockCost', 'SwordTier1', 6);
         CSUMenuSet('SkillUnlockCost', 'SwordTier2', 12);
         CSUMenuSet('SkillUnlockCost', 'SwordTier3', 18);
@@ -49,6 +47,14 @@ function CSU_Initialize() {
         CSUMenuSet('SlotUnlock', 'MutationsColourLocked', true);
     // Reset Toggle Init
         CSUMenuSet('CSUReset', 'ResetProgression', false);
+    }
+
+    if(userVersion < 2.0) {
+        CSUMenuSet('UnlockMethods', 'EnableColumnUnlocks', false);
+        CSUMenuSet('UnlockMethods', 'EnableAltColumnUnlocks', false);
+        CSUMenuSet('UnlockMethods', 'EnableRowUnlocks', true);
+        CSUMenuSet('UnlockMethods', 'EnablePerkRowUnlocks', false);
+        CSUMenuSet('UnlockMethods', 'EnablePerkColumnUnlocks', false);
     }
 
     if (userVersion < currentVersion) {
