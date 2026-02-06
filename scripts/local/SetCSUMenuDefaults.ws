@@ -4,7 +4,7 @@
 }
 
 function CSU_Initialize() {
-    var currentVersion: float = 1.1;
+    var currentVersion: float = 1.2;
     var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
 
     if (userVersion == currentVersion) {                                            // Up to date = early exit
