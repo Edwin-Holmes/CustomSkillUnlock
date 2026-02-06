@@ -257,7 +257,7 @@ struct CSUSkillCost {
 		am.UpdateSlotUnlocks();											//Update slot unlock levels
 	}
 
-	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
+	if (!CSUShouldRowsUnlock() && !CSUShouldColumnsUnlock() && !CSUShouldAltColumnsUnlock()) {			//If both paths disabled set vanilla behaviour
 		CSUMenuSet('SkillUnlockCost', 'EnableRowUnlocks', true);
 	}
 
@@ -276,27 +276,53 @@ struct CSUSkillCost {
 }
 
 @wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill): bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
-    var rowMet : bool = false;
-    var altColumnMet : bool = this.IsAltColumnRequirementMet(skill);
+    var columnMet : bool;
+    var rowMet : bool;
+    var altColumnMet : bool;
+	var perkMet : bool;
+
+	// Use dedicated Perk logic if it's a general skill
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
+		return this.IsPerkRequirementMet(skill);
+	}
+
+	if (CSUShouldAltColumnsUnlock()) {
+		return this.IsAltColumnRequirementMet(skill);
+	}
+
+    columnMet = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
+    rowMet = false;
     
     if (CSUShouldRowsUnlock()) {
         rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
-    return columnMet || rowMet || altColumnMet;
+    return columnMet || rowMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
-    var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
-    var rowMet : bool = false;
-    var altColumnMet : bool = this.IsAltColumnRequirementMet(skill);
+    var columnMet : bool;
+    var rowMet : bool;
+    var altColumnMet : bool;
+	var perkMet : bool;
+
+	// Use dedicated Perk logic if it's a general skill
+	if (skill >= S_Perk_01 && skill <= S_Perk_MAX) {
+		return this.IsPerkRequirementMet(skill);
+	}
+
+	if (CSUShouldAltColumnsUnlock()) {
+		return this.IsAltColumnRequirementMet(skill);
+	}
+
+    columnMet = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
+    rowMet = false;
     
     if (CSUShouldRowsUnlock()) {
         rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
-    return columnMet || rowMet || altColumnMet;
+    return columnMet || rowMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {

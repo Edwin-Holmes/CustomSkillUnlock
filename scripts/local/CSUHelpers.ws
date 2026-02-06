@@ -39,6 +39,14 @@ function CSUGetMutationsColourLocked(): bool {
     return CSUMenuBool('SlotUnlock', 'MutationsColourLocked');
 }
 
+function CSUShouldPerkRowsUnlock(): bool {
+	return CSUMenuBool('SkillUnlockCost', 'EnablePerkRowUnlocks');
+}
+
+function CSUShouldPerkColumnsUnlock(): bool {
+	return CSUMenuBool('SkillUnlockCost', 'EnablePerkColumnUnlocks');
+}
+
 function CSUShouldColumnsUnlock(): bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableColumnUnlocks');
 }
@@ -49,10 +57,6 @@ function CSUShouldRowsUnlock(): bool {
 
 function CSUShouldAltColumnsUnlock(): bool {
     return CSUMenuBool('SkillUnlockCost', 'EnableAltColumnUnlocks');
-}
-
-function CSUShouldPerksAltUnlock(): bool {
-	return CSUMenuBool('SkillUnlockCost', 'EnablePerkAltUnlock');
 }
 
 @addMethod(CR4IngameMenu) private function CSUCheckMenuResetToggle() {
