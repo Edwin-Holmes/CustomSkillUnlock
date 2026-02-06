@@ -278,23 +278,25 @@ struct CSUSkillCost {
 @wrapMethod(W3PlayerAbilityManager) function CanLearnSkill(skill : ESkill): bool {
     var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?
     var rowMet : bool = false;
+    var altColumnMet : bool = this.IsAltColumnRequirementMet(skill);
     
     if (CSUShouldRowsUnlock()) {
         rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
-    return columnMet || rowMet;
+    return columnMet || rowMet || altColumnMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function HasSpentEnoughPoints(skill : ESkill): bool {
     var columnMet : bool = this.IsColumnRequirementMet(skill); 	//Is parent skill max?	
     var rowMet : bool = false;
+    var altColumnMet : bool = this.IsAltColumnRequirementMet(skill);
     
     if (CSUShouldRowsUnlock()) {
         rowMet = wrappedMethod(skill);							//Would vanilla unlock the skill?
     }
     
-    return columnMet || rowMet;
+    return columnMet || rowMet || altColumnMet;
 }
 
 @wrapMethod(W3PlayerAbilityManager) function InitSkillSlots( isFromLoad : bool ) {
