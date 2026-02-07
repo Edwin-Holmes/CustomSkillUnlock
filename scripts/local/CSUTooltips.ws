@@ -1,7 +1,6 @@
 @addMethod(CR4CharacterMenu) function CSUUpdateSkillUnlockCosts() {
     var data: CScriptedFlashObject;
     var swordArr, magicArr, alchArr: CScriptedFlashArray;
-    var groupName: name = 'SkillUnlockCost';
 
     data = m_flashValueStorage.CreateTempFlashObject();
 
@@ -9,17 +8,17 @@
     magicArr = m_flashValueStorage.CreateTempFlashArray();
     alchArr = m_flashValueStorage.CreateTempFlashArray();
 
-    swordArr.PushBackFlashInt(CSUMenuInt(groupName, 'SwordTier1', 6));
-    swordArr.PushBackFlashInt(CSUMenuInt(groupName, 'SwordTier2', 12));
-    swordArr.PushBackFlashInt(CSUMenuInt(groupName, 'SwordTier3', 18));
+    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier1', 6));
+    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier2', 12));
+    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier3', 18));
 
-    magicArr.PushBackFlashInt(CSUMenuInt(groupName, 'MagicTier1', 6));
-    magicArr.PushBackFlashInt(CSUMenuInt(groupName, 'MagicTier2', 12));
-    magicArr.PushBackFlashInt(CSUMenuInt(groupName, 'MagicTier3', 18));
+    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier1', 6));
+    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier2', 12));
+    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier3', 18));
 
-    alchArr.PushBackFlashInt(CSUMenuInt(groupName, 'AlchemyTier1', 6));
-    alchArr.PushBackFlashInt(CSUMenuInt(groupName, 'AlchemyTier2', 12));
-    alchArr.PushBackFlashInt(CSUMenuInt(groupName, 'AlchemyTier3', 18));
+    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier1', 6));
+    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier2', 12));
+    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier3', 18));
 
     data.SetMemberFlashArray("sword", swordArr);
     data.SetMemberFlashArray("magic", magicArr);
@@ -52,13 +51,10 @@
 
     //CSU +++
     var altPointsRequired, vanillaPointsRequired, threshold, spentInBranch : int;
-    var altColumns : array<CSUAltColumn>;
-    var i, currentSkillRow : int;
-    var found : bool;
+    var columnIndex, rowIndex : int;
     var pointsRequired : int;
     
-
-    //If Vanilla settings, run vanilla
+    //If vanilla settings, give me two scoops of vanilla
     if (CSUShouldRowsUnlock() && !CSUShouldAltColumnsUnlock() && !CSUShouldPerkRowsUnlock() && !CSUShouldPerkColumnsUnlock()) {
         wrappedMethod(targetSkill, compareItemType, isGridView);
         return;
@@ -145,61 +141,43 @@
             if (vanillaPointsRequired < 0) vanillaPointsRequired = 0;
             pointsRequired = vanillaPointsRequired;
         }
+
+        if (CSUShouldColumnsUnlock() && !CSUShouldRowsUnlock()) {
+            pointsRequired = -1; 
+        }
         
         //Alt Columns
-        if (CSUShouldAltColumnsUnlock()) {
-            altColumns = abilityMgr.GetAltColumns();
-            found = false;
-            for (i = 0; i < altColumns.Size(); i += 1) {
-                if      (altColumns[i].s1 == targetSkill) {currentSkillRow = 1; found = true;}
-                else if (altColumns[i].s2 == targetSkill) {currentSkillRow = 2; found = true;}
-                else if (altColumns[i].s3 == targetSkill) {currentSkillRow = 3; found = true;}
-                else if (altColumns[i].s4 == targetSkill) {currentSkillRow = 4; found = true;}
-                
-                if (found) {
-                    threshold = abilityMgr.CSUGetAltColumnThreshold(currentSkillRow);
-                    spentInBranch = abilityMgr.GetSkillLevel(altColumns[i].s1) + abilityMgr.GetSkillLevel(altColumns[i].s2) + 
-                                    abilityMgr.GetSkillLevel(altColumns[i].s3) + abilityMgr.GetSkillLevel(altColumns[i].s4);
-                    altPointsRequired = threshold - spentInBranch;
-                    if (altPointsRequired < 0) altPointsRequired = 0;
-                    
-                    if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired || (pointsRequired == 0 && altPointsRequired > 0)) {
-                        pointsRequired = altPointsRequired;
-                    }
-                    break;
-                }
+        if (CSUShouldAltColumnsUnlock() && abilityMgr.FindSkillInAltColumn(targetSkill, columnIndex, rowIndex)) {
+            threshold = abilityMgr.CSUGetAltColumnThreshold(rowIndex);
+            spentInBranch = abilityMgr.GetAltColumnTotalSpent(columnIndex);
+            altPointsRequired = threshold - spentInBranch;
+            if (altPointsRequired < 0) altPointsRequired = 0;
+            
+            if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired || (pointsRequired == 0 && altPointsRequired > 0)) {
+                pointsRequired = altPointsRequired;
             }
         }
 
         //Perks
         if (targetSkill >= S_Perk_01 && targetSkill <= S_Perk_MAX) {
-            if (CSUShouldPerkRowsUnlock() || CSUShouldPerkColumnsUnlock()) {
-                 altColumns = abilityMgr.GetPerkColumns();
-                 found = false;
-                 for (i = 0; i < altColumns.Size(); i += 1) {
-                    if      (altColumns[i].s1 == targetSkill) {currentSkillRow = 1; found = true;}
-                    else if (altColumns[i].s2 == targetSkill) {currentSkillRow = 2; found = true;}
-                    else if (altColumns[i].s3 == targetSkill) {currentSkillRow = 3; found = true;}
-                    else if (altColumns[i].s4 == targetSkill) {currentSkillRow = 4; found = true;}
-                    else if (altColumns[i].s5 == targetSkill) {currentSkillRow = 5; found = true;}
-                    
-                    if (found) {
-                        threshold = abilityMgr.CSUGetPerkThreshold(currentSkillRow);
-                        spentInBranch = abilityMgr.GetPathPointsSpent(ESP_Perks);
-                        altPointsRequired = threshold - spentInBranch;
-                        if (altPointsRequired < 0) altPointsRequired = 0;
-                        
-                        if (CSUShouldPerkRowsUnlock()) {
-                             if (altPointsRequired > pointsRequired) {
-                                 pointsRequired = altPointsRequired;
-                             }
-                        }
-                        else if (!CSUShouldPerkRowsUnlock() && pointsRequired == 0 && altPointsRequired > 0) {
-                             pointsRequired = altPointsRequired;
-                        }
-                        break;
-                    }
-                 }
+            if ((CSUShouldPerkRowsUnlock() || CSUShouldPerkColumnsUnlock()) && abilityMgr.FindSkillInPerkColumn(targetSkill, columnIndex, rowIndex)) {
+                threshold = abilityMgr.CSUGetPerkThreshold(rowIndex);
+                spentInBranch = abilityMgr.GetPathPointsSpent(ESP_Perks);
+                altPointsRequired = threshold - spentInBranch;
+                if (altPointsRequired < 0) altPointsRequired = 0;
+
+                if (CSUShouldPerkColumnsUnlock() && !CSUShouldPerkRowsUnlock()) {
+                    altPointsRequired = -1;
+                }
+                
+                if (CSUShouldPerkRowsUnlock()) {
+                     if (altPointsRequired > pointsRequired) {
+                         pointsRequired = altPointsRequired;
+                     }
+                }
+                else if (!CSUShouldPerkRowsUnlock() && pointsRequired == 0 && altPointsRequired > 0) {
+                     pointsRequired = altPointsRequired;
+                }
             }
         }
     //CSU ---

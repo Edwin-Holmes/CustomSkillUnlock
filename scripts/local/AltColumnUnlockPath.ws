@@ -31,34 +31,49 @@ struct CSUAltColumn {
     return columns;
 }
 
-@addMethod(W3PlayerAbilityManager) public function IsAltColumnRequirementMet(skill: ESkill): bool {
+@addMethod(W3PlayerAbilityManager) public function FindSkillInAltColumn(skill: ESkill, out columnIndex: int, out rowIndex: int): bool {
     var columns: array<CSUAltColumn>;
     var i: int;
-    var currentSkillRow: int;
+
+    columns = this.GetAltColumns();
+
+    for (i = 0; i < columns.Size(); i += 1) {
+        if      (columns[i].s1 == skill) {columnIndex = i; rowIndex = 1; return true;}
+        else if (columns[i].s2 == skill) {columnIndex = i; rowIndex = 2; return true;}
+        else if (columns[i].s3 == skill) {columnIndex = i; rowIndex = 3; return true;}
+        else if (columns[i].s4 == skill) {columnIndex = i; rowIndex = 4; return true;}
+    }
+
+    return false;
+}
+
+@addMethod(W3PlayerAbilityManager) public function GetAltColumnTotalSpent(columnIndex: int): int {
+    var columns: array<CSUAltColumn>;
+    
+    columns = this.GetAltColumns();
+    
+    if (columnIndex < 0 || columnIndex >= columns.Size()) {
+        return 0;
+    }
+
+    return this.GetSkillLevel(columns[columnIndex].s1) + this.GetSkillLevel(columns[columnIndex].s2) + 
+           this.GetSkillLevel(columns[columnIndex].s3) + this.GetSkillLevel(columns[columnIndex].s4);
+}
+
+@addMethod(W3PlayerAbilityManager) public function IsAltColumnRequirementMet(skill: ESkill): bool {
+    var columnIndex, rowIndex: int;
     var totalSpent: int;
-    var found: bool = false;
 
     if (!CSUShouldAltColumnsUnlock()) {
         return false;
     }
 
-    columns = this.GetAltColumns();
-
-    for (i = 0; i < columns.Size(); i += 1) {           //Get grid position
-        if      (columns[i].s1 == skill) {currentSkillRow = 1; found = true;}
-        else if (columns[i].s2 == skill) {currentSkillRow = 2; found = true;}
-        else if (columns[i].s3 == skill) {currentSkillRow = 3; found = true;}
-        else if (columns[i].s4 == skill) {currentSkillRow = 4; found = true;}
-
-        if (found) {                                    //Unlock if spend sufficient
-            totalSpent = this.GetSkillLevel(columns[i].s1) + this.GetSkillLevel(columns[i].s2) + 
-                         this.GetSkillLevel(columns[i].s3) + this.GetSkillLevel(columns[i].s4);
-
-            return totalSpent >= this.CSUGetAltColumnThreshold(currentSkillRow);
-        }
+    if (!this.FindSkillInAltColumn(skill, columnIndex, rowIndex)) {
+        return true; //Not handled by alt column unlock (e.g. core skills)
     }
 
-    return true; //Not handled by alt column unlock (e.g. core skills)
+    totalSpent = this.GetAltColumnTotalSpent(columnIndex);
+    return totalSpent >= this.CSUGetAltColumnThreshold(rowIndex);
 }
 
 @addMethod(W3PlayerAbilityManager) public function CSUGetAltColumnThreshold(row: int): int {
