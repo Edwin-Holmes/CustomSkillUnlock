@@ -55,7 +55,8 @@
     var pointsRequired : int;
     
     //If vanilla settings, give me two scoops of vanilla
-    if (CSUShouldRowsUnlock() && !CSUShouldAltColumnsUnlock() && !CSUShouldPerkRowsUnlock() && !CSUShouldPerkColumnsUnlock()) {
+    if ( !CSUShouldAltColumnsUnlock() && !CSUShouldColumnsUnlock() 
+        && !CSUShouldPerkRowsUnlock() && !CSUShouldPerkColumnsUnlock() ) {
         wrappedMethod(targetSkill, compareItemType, isGridView);
         return;
     }
