@@ -9,11 +9,11 @@
 }
 
 //Shorthand to set/get values from menu
-function CSUMenuInt(group: name, key: name, defaultValue: int): int {
+function CSUMenuInt(group: name, key: name, optional defaultValue: int): int {
     return StringToInt(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
 
-function CSUMenuFloat(group: name, key: name, defaultValue: float): float {
+function CSUMenuFloat(group: name, key: name, optional defaultValue: float): float {
     return StringToFloat(theGame.GetInGameConfigWrapper().GetVarValue(group, key), defaultValue);
 }
 
