@@ -142,19 +142,20 @@
             pointsRequired = vanillaPointsRequired;
         }
 
-        if (CSUShouldColumnsUnlock() && !CSUShouldRowsUnlock()) {
+        //Simple colum alone
+        if (CSUShouldColumnsUnlock() && !CSUShouldRowsUnlock()) { 
             pointsRequired = -1; 
         }
         
-        //Alt Columns
+        //Alt column
         if (CSUShouldAltColumnsUnlock() && abilityMgr.FindSkillInAltColumn(targetSkill, columnIndex, rowIndex)) {
             threshold = abilityMgr.CSUGetAltColumnThreshold(rowIndex);
             spentInBranch = abilityMgr.GetAltColumnTotalSpent(columnIndex);
             altPointsRequired = threshold - spentInBranch;
             if (altPointsRequired < 0) altPointsRequired = 0;
             
-            if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired || (pointsRequired == 0 && altPointsRequired > 0)) {
-                pointsRequired = altPointsRequired;
+            if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired) {     //Alt column alone or Alt column < Vanilla rows
+                pointsRequired = altPointsRequired;                                 //Show column requirement
             }
         }
 
@@ -166,17 +167,12 @@
                 altPointsRequired = threshold - spentInBranch;
                 if (altPointsRequired < 0) altPointsRequired = 0;
 
-                if (CSUShouldPerkColumnsUnlock() && !CSUShouldPerkRowsUnlock()) {
+                if (CSUShouldPerkColumnsUnlock() && !CSUShouldPerkRowsUnlock()) {   //hide for column
                     altPointsRequired = -1;
                 }
                 
-                if (CSUShouldPerkRowsUnlock()) {
-                     if (altPointsRequired > pointsRequired) {
+                if (CSUShouldPerkRowsUnlock() || altPointsRequired == -1) {         //If it's rows, it shows
                          pointsRequired = altPointsRequired;
-                     }
-                }
-                else if (!CSUShouldPerkRowsUnlock() && pointsRequired == 0 && altPointsRequired > 0) {
-                     pointsRequired = altPointsRequired;
                 }
             }
         }

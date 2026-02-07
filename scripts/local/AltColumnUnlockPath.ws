@@ -69,7 +69,7 @@ struct CSUAltColumn {
     }
 
     if (!this.FindSkillInAltColumn(skill, columnIndex, rowIndex)) {
-        return true; //Not handled by alt column unlock (e.g. core skills)
+        return true;            //Not handled by alt column unlock
     }
 
     totalSpent = this.GetAltColumnTotalSpent(columnIndex);
@@ -78,11 +78,16 @@ struct CSUAltColumn {
 
 @addMethod(W3PlayerAbilityManager) public function CSUGetAltColumnThreshold(row: int): int {
     switch(row) {
-        case 1:  return 0;      //Tier 1
-        case 2:  return 1;      //Tier 2 requires 1 point in column
-        case 3:  return 3;      //Tier 3 requires 3 points in column
-        case 4:  return 6;      //Tier 4 requires 6 points in column
-        default: return 0;
+        case 1:  
+            return 0;      //Tier 1: core
+        case 2:  
+            return 1;      //Tier 2: 1 point
+        case 3:  
+            return 3;      //Tier 3: 3 points
+        case 4:  
+            return 6;      //Tier 4: 6 points
+        default: 
+            return 0;
     }
 }
 

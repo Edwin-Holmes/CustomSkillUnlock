@@ -41,11 +41,10 @@
     }
 
     if (!rowActive && !colActive) {
-        return true; //Both disabled = all unlocked (Vanilla)
+        return true;                        //Both disabled = all unlocked (Vanilla)
     }
 
-    if (!this.FindSkillInPerkColumn(skill, columnIndex, rowIndex)) {
-        //Skill not in perk grid (shouldn't happen for perks, but handle gracefully)
+    if (!this.FindSkillInPerkColumn(skill, columnIndex, rowIndex)) {    //Better safe than sorry
         if (!rowActive) {
             return true;
         }
@@ -75,12 +74,18 @@
 
 @addMethod(W3PlayerAbilityManager) public function CSUGetPerkThreshold(row: int): int {
     switch(row) {
-        case 1:  return 0;      //Tier 1 (free via branch unlock?) No, row 1 is always unlocked if rowActive is true.
-        case 2:  return 1;      //Tier 2 requires 1 point in branch
-        case 3:  return 3;
-        case 4:  return 6;
-        case 5:  return 9;
-        default: return 0;
+        case 1:  
+            return 0;      //Tier 1: Always open
+        case 2:  
+            return 1;      //Tier 2: 1 point
+        case 3:  
+            return 3;      //Tier 3: 3 points
+        case 4:  
+            return 6;      //Tier 4: 6 points
+        case 5:  
+            return 9;      //Tier 5: 9 points
+        default: 
+            return 0;
     }
 }
 
