@@ -1,7 +1,7 @@
 @addMethod(W3PlayerAbilityManager) private function CSUFindSkillIndex(target: ESkill, skillList: array<SSkill>): int {
     var i: int;
     for (i = 0; i < skillList.Size(); i += 1) {
-        if (skillList[i].skillType == target) { 		//Loook thorugh SSkill array for an ESkill	
+        if (skillList[i].skillType == target) { 		//Look through SSkill array for an ESkill	
             return i;									//Return index of skill if found
         }
     }
