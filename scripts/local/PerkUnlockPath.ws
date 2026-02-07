@@ -3,7 +3,7 @@ struct CSURowThreshold {
     var threshold: int;
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetPerkColumns(): array<CSUAltColumn> {
+@addMethod(W3PlayerAbilityManager) public function GetPerkColumns(): array<CSUAltColumn> {
     var columns: array<CSUAltColumn>;
     var col: CSUAltColumn;
 
@@ -80,3 +80,15 @@ struct CSURowThreshold {
 
     return rowMet || colMet;
 }
+
+@addMethod(W3PlayerAbilityManager) public function CSUGetPerkThreshold(row: int): int {
+    switch(row) {
+        case 1:  return 0;      //Tier 1 (free via branch unlock?) No, row 1 is always unlocked if rowActive is true.
+        case 2:  return 1;      //Tier 2 requires 1 point in branch
+        case 3:  return 3;
+        case 4:  return 6;
+        case 5:  return 10;
+        default: return 0;
+    }
+}
+

@@ -3,7 +3,7 @@ struct CSUAltColumn {
     var s1, s2, s3, s4, s5: ESkill;
 }
 
-@addMethod(W3PlayerAbilityManager) private function GetAltColumns(): array<CSUAltColumn> {
+@addMethod(W3PlayerAbilityManager) public function GetAltColumns(): array<CSUAltColumn> {
     var columns: array<CSUAltColumn>;
     var col: CSUAltColumn;
 
@@ -54,20 +54,20 @@ struct CSUAltColumn {
             totalSpent = this.GetSkillLevel(columns[i].s1) + this.GetSkillLevel(columns[i].s2) + 
                          this.GetSkillLevel(columns[i].s3) + this.GetSkillLevel(columns[i].s4);
 
-            switch(currentSkillRow) {
-                case 1:  
-					return true;            
-                case 2:  
-					return totalSpent >= 1; 
-                case 3:  
-                    return totalSpent >= 3;  
-                case 4:  
-                    return totalSpent >= 6;  
-                default: 
-                    return true;
-            }
+            return totalSpent >= this.CSUGetAltColumnThreshold(currentSkillRow);
         }
     }
 
-    return true; //Not handled by alt column unlock
+    return true; //Not handled by alt column unlock (e.g. core skills)
 }
+
+@addMethod(W3PlayerAbilityManager) public function CSUGetAltColumnThreshold(row: int): int {
+    switch(row) {
+        case 1:  return 0;      //Tier 1
+        case 2:  return 1;      //Tier 2 requires 1 point in column
+        case 3:  return 3;      //Tier 3 requires 3 points in column
+        case 4:  return 6;      //Tier 4 requires 6 points in column
+        default: return 0;
+    }
+}
+
