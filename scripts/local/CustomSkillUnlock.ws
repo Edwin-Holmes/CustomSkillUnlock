@@ -365,17 +365,16 @@ struct CSUSkillCost {
 }
 
 //Effectively replaceMethod because of the flash array :(
-@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void 
-{
-	var i, slotsCount : int;
-	var curSlot      : SSkillSlot;
-	var skillSlots   : array<SSkillSlot>;
-	var equipedSkill : SSkill;
-	var gfxSlots     : CScriptedFlashObject;
-	var gfxSlotsList : CScriptedFlashArray;
-	var equippedMutationId : EPlayerMutationType;
-	var colorsList		   : array< ESkillColor >;
-	var colorBorderId      : string;
+@wrapMethod(CR4CharacterMenu) function UpdateAppliedSkills(): void {
+	var i, slotsCount 		: int;
+	var curSlot      		: SSkillSlot;
+	var skillSlots   		: array<SSkillSlot>;
+	var equipedSkill 		: SSkill;
+	var gfxSlots     		: CScriptedFlashObject;
+	var gfxSlotsList 		: CScriptedFlashArray;
+	var equippedMutationId 	: EPlayerMutationType;
+	var colorsList		   	: array< ESkillColor >;
+	var colorBorderId      	: string;
 	
 	wrappedMethod();
 	

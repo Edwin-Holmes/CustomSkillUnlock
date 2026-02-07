@@ -142,7 +142,7 @@
             pointsRequired = vanillaPointsRequired;
         }
 
-        //Simple colum alone
+        //Simple column alone
         if (CSUShouldColumnsUnlock() && !CSUShouldRowsUnlock()) { 
             pointsRequired = -1; 
         }
@@ -154,7 +154,7 @@
             altPointsRequired = threshold - spentInBranch;
             if (altPointsRequired < 0) altPointsRequired = 0;
             
-            if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired) {     //Alt column alone or Alt column < Vanilla rows
+            if (!CSUShouldRowsUnlock() || altPointsRequired < pointsRequired) {     //Alt column alone or Alt column < vanilla rows
                 pointsRequired = altPointsRequired;                                 //Show column requirement
             }
         }
