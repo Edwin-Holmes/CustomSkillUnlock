@@ -46,6 +46,9 @@ All features can be configured through the **in-game mod menu**. Access it from 
 ### Available Settings:
 - **Skill Unlock Costs**: Set points required per tier for each skill branch
 - **Column Unlock Mode**: Toggle column-based unlock logic on/off
+- **Spend-Based Column Unlock Mode**: Toggle points-based column unlock logic on/off
+- **General Skills Unlock by Row**: Perks are locked and are unlocked by row based on total points in branch
+- **General Skills Unlock by Column**: Perks are locked and are unlocked by column, each skill unlocking the one below
 - **Slot Level Requirements**: Customize when each skill slot unlocks
 - **Mutagen Level Requirements**: Customize when each mutagen slot unlocks
 - **Mutations Required to Unlock Bonus Slots**: Set the number of mutations required to unlock each bonus slot.
