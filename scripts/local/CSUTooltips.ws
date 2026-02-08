@@ -1,39 +1,3 @@
-@addMethod(CR4CharacterMenu) function CSUUpdateSkillUnlockCosts() {
-    var data: CScriptedFlashObject;
-    var swordArr, magicArr, alchArr: CScriptedFlashArray;
-
-    data = m_flashValueStorage.CreateTempFlashObject();
-
-    swordArr = m_flashValueStorage.CreateTempFlashArray();
-    magicArr = m_flashValueStorage.CreateTempFlashArray();
-    alchArr = m_flashValueStorage.CreateTempFlashArray();
-
-    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier1', 6));
-    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier2', 12));
-    swordArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'SwordTier3', 18));
-
-    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier1', 6));
-    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier2', 12));
-    magicArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'MagicTier3', 18));
-
-    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier1', 6));
-    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier2', 12));
-    alchArr.PushBackFlashInt(CSUMenuInt('SkillUnlockCost', 'AlchemyTier3', 18));
-
-    data.SetMemberFlashArray("sword", swordArr);
-    data.SetMemberFlashArray("magic", magicArr);
-    data.SetMemberFlashArray("alchemy", alchArr);
-
-    m_flashValueStorage.SetFlashObject("character.skills.unlockCosts", data);
-    
-    m_flashValueStorage.SetFlashBool("character.skills.columnOnlyUnlock", CSUShouldColumnsUnlock() && !CSUShouldRowsUnlock());
-}
-
-@wrapMethod(CR4CharacterMenu) function UpdateData(tabs : bool) : void {
-    this.CSUUpdateSkillUnlockCosts();
-    wrappedMethod(tabs);
-}
-
 //Another effective replace due to flash
 @wrapMethod(CR4CharacterMenu) function GetSkillTooltipData(targetSkill : ESkill, compareItemType : int, isGridView : bool) {
     var abilityMgr 			  : W3PlayerAbilityManager;
