@@ -2,11 +2,11 @@
     var columns: array<CSUAltColumn>;
     var col: CSUAltColumn;
 
-    col.columnName = 'PerkCol1'; col.s1 = S_Perk_01; col.s2 = S_Perk_02; col.s3 = S_Perk_13; col.s4 = S_Perk_14; columns.PushBack(col);
-    col.columnName = 'PerkCol2'; col.s1 = S_Perk_04; col.s2 = S_Perk_09; col.s3 = S_Perk_17; col.s4 = S_Perk_15; columns.PushBack(col);
-    col.columnName = 'PerkCol3'; col.s1 = S_Perk_05; col.s2 = S_Perk_10; col.s3 = S_Perk_18; col.s4 = S_Perk_16; columns.PushBack(col);
-    col.columnName = 'PerkCol4'; col.s1 = S_Perk_06; col.s2 = S_Perk_11; col.s3 = S_Perk_19; col.s4 = S_Perk_20; columns.PushBack(col);
-    col.columnName = 'PerkCol5'; col.s1 = S_Perk_07; col.s2 = S_Perk_12; col.s3 = S_Perk_22; col.s4 = S_Perk_21; columns.PushBack(col);
+    col.columnName = 'PerkCol1'; col.s1 = S_Perk_01; col.s2 = S_Perk_02; col.s3 = S_Perk_13; col.s4 = S_Perk_14; col.s5 = S_Perk_03; columns.PushBack(col);
+    col.columnName = 'PerkCol2'; col.s1 = S_Perk_04; col.s2 = S_Perk_09; col.s3 = S_Perk_17; col.s4 = S_Perk_15; col.s5 = S_Perk_23; columns.PushBack(col);
+    col.columnName = 'PerkCol3'; col.s1 = S_Perk_05; col.s2 = S_Perk_10; col.s3 = S_Perk_18; col.s4 = S_Perk_16; col.s5 = S_Perk_24; columns.PushBack(col);
+    col.columnName = 'PerkCol4'; col.s1 = S_Perk_06; col.s2 = S_Perk_11; col.s3 = S_Perk_19; col.s4 = S_Perk_20; col.s5 = S_Perk_25; columns.PushBack(col);
+    col.columnName = 'PerkCol5'; col.s1 = S_Perk_07; col.s2 = S_Perk_12; col.s3 = S_Perk_22; col.s4 = S_Perk_21; col.s5 = S_Perk_26; columns.PushBack(col);
 
     return columns;
 }
