@@ -4,7 +4,7 @@
 }
 
 function CSU_Initialize() {
-    var currentVersion: float = 2.0;
+    var currentVersion: float = 2.1;
     var userVersion: float = CSUMenuFloat('SkillUnlockCost', 'CSUVersion', 0.0);
 
     if (userVersion == currentVersion) {                                            // Up to date = early exit
@@ -49,7 +49,7 @@ function CSU_Initialize() {
         CSUMenuSet('CSUReset', 'ResetProgression', false);
     }
 
-    if(userVersion < 2.0) {
+    if(userVersion < 2.1) {
         CSUMenuSet('UnlockMethods', 'EnableColumnUnlocks', false);
         CSUMenuSet('UnlockMethods', 'EnableAltColumnUnlocks', false);
         CSUMenuSet('UnlockMethods', 'EnableRowUnlocks', true);

@@ -10,13 +10,13 @@
     var skillNumPoitnsNeeded  : int;
     var pathPointsSpent		  : int;
     
-    var originSkillLevel : int;
-    var boostedSkillLevel : int;
+    var originSkillLevel      : int;
+    var boostedSkillLevel     : int;
 
     //CSU +++
-    var altPointsRequired, vanillaPointsRequired, threshold, spentInBranch : int;
-    var columnIndex, rowIndex : int;
-    var pointsRequired : int;
+    var altPointsRequired, vanillaPointsRequired, threshold, spentInBranch: int;
+    var columnIndex, rowIndex: int;
+    var pointsRequired: int;
     
     //If vanilla settings, give me two scoops of vanilla
     if ( !CSUShouldAltColumnsUnlock() && !CSUShouldColumnsUnlock() 
