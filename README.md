@@ -8,7 +8,13 @@ A comprehensive Witcher 3 mod that gives you complete control over skill progres
 Configure how many points must be spent in each skill branch (Combat, Signs, Alchemy) to unlock higher-tier skills.
 
 ### 📊 Column-Based Unlocks
-Alternative unlock system where skills also become available when you fully master their direct precursor in the same column, regardless of total points spent in the branch.
+Alternative unlock system where skills also become available when you fully upgrade their direct precursor in the same column, regardless of total points spent in the branch.
+
+### 📊 Spend-Based Column Unlocks
+Unlock column by total points spent in each column: 1; 3; 6, for each row.
+
+### 🔓 General Skills Unlocks
+Set skills in the General branch to unlock, either by row (1/3/6), column or both, or keep always unlocked as in vanilla.
 
 ### 🔓 Customizable Slot & Mutagen Unlocks
 Set your own level requirements for unlocking all 12 skill slots and 4 mutagen slots.
